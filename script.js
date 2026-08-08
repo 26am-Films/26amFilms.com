@@ -232,12 +232,12 @@ const portfolioCategories = {
     ].map((id, i) => ({ id, title: `Reel ${String(i + 1).padStart(2, "0")}` })),
   },
   vox: {
-    title: "Vox style editing",
+    title: "Talking-head video editing",
     description: "Story-led explainer edits with kinetic captions, atmosphere, real voices, and deeper narrative structure.",
     vertical: false,
     videos: [
-      { id: "DHfRMLihR18", title: "Vox style 01" },
-      { id: "B3E1F0rJnLQ", title: "Vox style 02" },
+      { id: "DHfRMLihR18", title: "Talking-head 01" },
+      { id: "B3E1F0rJnLQ", title: "Talking-head 02" },
     ],
   },
   "motion-saas": {
