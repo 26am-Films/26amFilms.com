@@ -217,7 +217,7 @@ const portfolioCategories = {
       "vuxztj8MXxI", "n3uEWZ1KT64", "iVa0NP3u74s", "SEAVE9XgBbM", "-stDHMwbBRw",
       "aI5-oKjfgo4", "wueNYL-wNiU", "VwJnowQ7Iio", "2IiKVJhrWQQ", "4JKzfCdwiSo",
       "SJi5MfOZYnk", "aDZd77cefbs",
-    ].map((id, i) => ({ id, title: `Podcast Episode ${String(i + 1).padStart(2, "0")}` })),
+    ].map((id) => ({ id, title: "" })),
   },
   reels: {
     title: "Reels/Shorts",
@@ -290,7 +290,7 @@ const createVideoThumb = (video, vertical) => {
   thumb.type = "button";
   thumb.className = vertical ? "video-thumb vertical" : "video-thumb";
   thumb.dataset.videoId = video.id;
-  thumb.setAttribute("aria-label", `Play ${video.title}`);
+  thumb.setAttribute("aria-label", video.title ? `Play ${video.title}` : "Play video");
   // hqdefault is far lighter than maxresdefault and looks identical at
   // grid thumbnail size — kept lazy so only on-screen thumbs ever load.
   thumb.dataset.lazyBg = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
@@ -298,11 +298,19 @@ const createVideoThumb = (video, vertical) => {
   thumb.addEventListener("click", () => openVideo(video.id, vertical));
   thumbObserver.observe(thumb);
 
-  const caption = document.createElement("p");
-  caption.className = "video-caption";
-  caption.textContent = video.title;
+  card.append(thumb);
 
-  card.append(thumb, caption);
+  // Titles are only generated where they're a fair generic label (e.g.
+  // "Reel 01"). Podcast videos are real client projects, not sequential
+  // episodes, and their real thumbnails already carry the actual title —
+  // so no caption is added here rather than showing a misleading one.
+  if (video.title) {
+    const caption = document.createElement("p");
+    caption.className = "video-caption";
+    caption.textContent = video.title;
+    card.append(caption);
+  }
+
   return card;
 };
 
