@@ -1200,19 +1200,62 @@ html[data-theme="light"] .site-header {
   animation-play-state: paused;
 }
 
-.marquee-item {
+.marquee-logo {
   align-items: center;
   background: var(--surface);
-  border: 1px dashed var(--line);
+  border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  color: var(--muted);
   display: flex;
   flex-shrink: 0;
-  font-size: 0.8rem;
-  font-weight: 700;
   height: 90px;
   justify-content: center;
+  padding: 1rem 1.6rem;
   width: 190px;
+}
+
+.marquee-logo img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.testimonial-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 0.6rem;
+  height: 90px;
+  justify-content: center;
+  padding: 1rem 1.3rem;
+  width: 340px;
+}
+
+.testimonial-stars {
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.testimonial-card p {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--text);
+  display: -webkit-box;
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.35;
+  margin: 0;
+  overflow: hidden;
+}
+
+.testimonial-source {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 650;
 }
 
 @keyframes marqueeLeft {
