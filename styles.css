@@ -1117,9 +1117,10 @@ html[data-theme="light"] .site-header {
 
 .tool-icons img {
   height: 2.1rem;
+  max-width: 5.2rem;
   opacity: 0.92;
   transition: opacity 220ms var(--ease), transform 220ms var(--ease);
-  width: 2.1rem;
+  width: auto;
 }
 
 .tool-icons img:hover {
@@ -1699,6 +1700,15 @@ html[data-theme="light"] .site-header {
 @media (max-width: 620px) {
   section {
     padding: 3.6rem 0;
+  }
+
+  .header-actions {
+    gap: 0.4rem;
+  }
+
+  .header-cta {
+    font-size: 0.66rem;
+    padding: 0.42rem 0.5rem;
   }
 
   .stats,
