@@ -216,7 +216,7 @@ const portfolioCategories = {
       "WjMy0JFTQZ0", "9ycqruB4Pl0", "7GFPAPrysFY", "5OS3pZ3yXrg", "ONGmW6POqX4",
       "vuxztj8MXxI", "n3uEWZ1KT64", "iVa0NP3u74s", "SEAVE9XgBbM", "-stDHMwbBRw",
       "aI5-oKjfgo4", "wueNYL-wNiU", "VwJnowQ7Iio", "2IiKVJhrWQQ", "4JKzfCdwiSo",
-      "SJi5MfOZYnk", "aDZd77cefbs",
+      "SJi5MfOZYnk", "aDZd77cefbs", "AsWsnL_zcmA",
     ].map((id) => ({ id, title: "" })),
   },
   reels: {
@@ -228,7 +228,7 @@ const portfolioCategories = {
       "qE4er7kqTqs", "2Q219fO2-Aw", "nslPhWLEu8M", "6rlRyj0_eDo", "euwwYeG2POE",
       "6iLH5IPmBJQ", "kTqo8ZCNHy8", "hEIUfa4B1Ng", "dCIl2I5_CJk", "99Oc2Ozp998",
       "5386z9zDuIM", "6mnAQABar5s", "kq3Z0u2OpHo", "UqJIBgnfVFs", "Sg7D9NXsLjs",
-      "nWZ-kRttIeQ", "Lx7yS5DOgSY", "SZuWOagXT7M", "uhdkE6oZJdM",
+      "nWZ-kRttIeQ", "Lx7yS5DOgSY", "SZuWOagXT7M", "uhdkE6oZJdM", "009L0XUuJ-g", "uDUy0cPeCUA", "CC8Wb7BGoV4",
     ].map((id, i) => ({ id, title: `Reel ${String(i + 1).padStart(2, "0")}` })),
   },
   vox: {
@@ -487,7 +487,7 @@ contactForm?.addEventListener("submit", async (event) => {
     // a message still gets through either way.
     const subject = encodeURIComponent(`26amFilms project inquiry from ${payload.name || ""}`);
     const body = encodeURIComponent(`Name: ${payload.name}\nEmail: ${payload.email}\n\nProject:\n${payload.message}`);
-    window.location.href = `mailto:twenty6am@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:hello@26amfilms.com?subject=${subject}&body=${body}`;
     formStatus.textContent = "Opening your email app instead — Netlify Forms isn't available here.";
     formStatus.hidden = false;
     formStatus.classList.add("error");
@@ -534,4 +534,37 @@ document.querySelectorAll("[data-placeholder-link]").forEach((link) => {
 });
 
 
+
+
+/* ==========================================================================
+   FAQ Modal & Floating Button
+   ========================================================================== */
+const faqButton = document.querySelector("[data-faq-button]");
+const faqModal = document.querySelector("[data-faq-modal]");
+const faqModalClose = document.querySelectorAll("[data-faq-modal-close]");
+
+if (faqButton && faqModal) {
+  // Open modal on button click
+  faqButton.addEventListener("click", () => {
+    faqModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  });
+
+  // Close modal on close button or backdrop click
+  faqModalClose.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      faqModal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    });
+  });
+
+  // Close modal on ESC key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && faqModal.getAttribute("aria-hidden") === "false") {
+      faqModal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+  });
+}
 
