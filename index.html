@@ -1,40 +1,65 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D6DQ7XVMG0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D6DQ7XVMG0');
+</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>26amFilms — Video Editing, Motion Design &amp; Post-Production Studio</title>
 <meta name="description" content="26amFilms is a video editing and motion design studio founded by Santosh Panigrahi, helping brands turn raw footage into premium, high-retention videos." />
-<meta name="theme-color" content="#0d0d0d" />
+<meta name="theme-color" content="#000000" />
 <link rel="icon" href="./assets/26am-circle.png" />
+<script>
+  try { var t = localStorage.getItem("26amfilms-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
 
-<a class="sr-only" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
 
 <header class="site-header" data-header>
-  <div class="container">
-    <a class="brand" href="#top">
-      <img src="./assets/26am-circle.png" alt="26amFilms" onerror="this.setAttribute('data-broken','1')" />
-      <span class="brand-fallback">26</span>
-      <span class="brand-name sr-only">26amFilms</span>
+  <div class="container header-inner">
+    <a class="brand" href="#top" aria-label="26amFilms — home">
+      <span class="brand-word">26am<em>Films</em></span>
     </a>
-    <nav class="main-nav">
+    <nav class="main-nav" aria-label="Primary">
       <a href="#work">Portfolio</a>
       <a href="#services">Services</a>
       <a href="#about">About</a>
+      <a href="#contact">Contact</a>
       <a href="./resources.html">Free Resources</a>
     </nav>
     <div class="header-actions">
-      <a class="button small secondary header-cta" href="#contact">Contact</a>
-      <a class="button small secondary header-cta" href="#hire-me">Hire Me</a>
-      <a class="button small primary header-cta" href="https://calendar.app.google/VgQrEWxaVizVQtqo8" target="_blank" rel="noopener">Schedule a Meeting</a>
-      <button class="icon-button" type="button" data-theme-toggle aria-label="Toggle light and dark theme">◐</button>
+      <a class="button small ghost header-hide-sm" href="#hire-me">Hire Me</a>
+      <a class="button small solid" href="https://calendar.app.google/VgQrEWxaVizVQtqo8" target="_blank" rel="noopener">Book a Call</a>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="Switch between black and white theme"><span class="theme-dot"></span></button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </div>
   <div class="scroll-progress" data-scroll-progress></div>
 </header>
+
+<div class="mobile-menu" data-mobile-menu aria-hidden="true">
+  <nav>
+    <a href="#work">Portfolio</a>
+    <a href="#services">Services</a>
+    <a href="#about">About</a>
+    <a href="#hire-me">Hire Me</a>
+    <a href="#contact">Contact</a>
+    <a href="./resources.html">Free Resources</a>
+  </nav>
+</div>
 
 <main id="main">
 
@@ -43,52 +68,56 @@
 
   <!-- Hero -->
   <section class="hero" id="top">
-    <div class="hero-bg" aria-hidden="true">
+    <div class="hero-media" aria-hidden="true">
       <img src="./assets/hero-photo.jpg" alt="" />
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
 
-    <div class="container">
-      <p class="hero-kicker">Video Editing · Motion Graphics · Podcast Editing · YouTube Content</p>
-      <h1>26amFilms</h1>
-      <p class="hero-founder">Founded by <strong>Santosh Panigrahi</strong></p>
-      <p class="hero-sub">Video editing that keeps your audience watching.</p>
-      <p class="hero-body">I'm a Video Editor and Motion Designer with 15+ years of experience creating content for YouTube, podcasts, brands, startups, and agencies. I combine editing, motion graphics, storytelling, and sound design to turn ideas into polished, engaging videos.</p>
-      <div class="hero-actions">
-        <a class="button primary" href="#work">View Work</a>
-        <a class="button secondary" href="#contact">Start a Project</a>
+    <div class="container hero-content">
+      <p class="hero-kicker split-in"><span>Video Editing · Motion Graphics · Podcast Editing · YouTube Content</span></p>
+      <h1 class="hero-title">
+        <span class="line"><span>26am<em>Films</em></span></span>
+      </h1>
+      <div class="hero-bottom">
+        <div class="hero-copy split-in">
+          <p class="hero-sub"><span>Video editing that keeps your audience watching.</span></p>
+          <p class="hero-body"><span>Founded by <strong>Santosh Panigrahi</strong> — a Video Editor and Motion Designer with 15+ years of experience creating content for YouTube, podcasts, brands, startups, and agencies.</span></p>
+        </div>
+        <div class="hero-actions split-in">
+          <span><a class="button solid" href="#work">View Work</a></span>
+          <span><a class="button ghost" href="#contact">Start a Project</a></span>
+        </div>
       </div>
     </div>
-    <span class="scroll-hint">Scroll</span>
   </section>
 
-  <!-- Current Focus / Stats -->
-  <section id="focus">
+  <!-- Focus / Stats -->
+  <section id="focus" class="section">
     <div class="container">
-      <div class="focus-head reveal">
-        <div>
+      <div class="split-head">
+        <div class="reveal">
           <span class="eyebrow">Current Focus</span>
-          <h2>Editing for clarity, retention, and premium brand feel.</h2>
+          <h2>Editing for clarity, retention, and a <em>premium</em> brand feel.</h2>
         </div>
-        <p>I help teams move from raw footage to finished content with strong story structure, clean pacing, brand consistency, motion polish, and sound design that supports the message. I avoid flashy effects that distract from the story — every animation supports the content.</p>
+        <p class="reveal">I help teams move from raw footage to finished content with strong story structure, clean pacing, brand consistency, motion polish, and sound design that supports the message. No flashy effects that distract from the story — every animation supports the content.</p>
       </div>
 
-      <div class="stats reveal">
-        <div class="stat-card">
-          <div class="stat-value"><span data-counter data-target="15" data-start-year="2011">0</span><span class="stat-suffix">+</span></div>
-          <p class="stat-label">Years of experience</p>
+      <div class="stats reveal-group">
+        <div class="stat">
+          <div class="stat-value"><span data-counter data-target="15" data-start-year="2011">0</span><sup>+</sup></div>
+          <p>Years of experience</p>
         </div>
-        <div class="stat-card">
-          <div class="stat-value"><span data-counter data-target="400">0</span><span class="stat-suffix">+</span></div>
-          <p class="stat-label">Videos edited</p>
+        <div class="stat">
+          <div class="stat-value"><span data-counter data-target="400">0</span><sup>+</sup></div>
+          <p>Videos edited</p>
         </div>
-        <div class="stat-card">
-          <div class="stat-value"><span data-counter data-target="1700000" data-start-from="1600000" data-duration="4200" data-jitter="true" data-format="comma">0</span><span class="stat-suffix">+</span></div>
-          <p class="stat-label">Total views generated</p>
+        <div class="stat">
+          <div class="stat-value"><span data-counter data-target="1700000" data-start-from="1600000" data-duration="3200" data-format="comma">0</span><sup>+</sup></div>
+          <p>Total views generated</p>
         </div>
-        <div class="stat-card">
+        <div class="stat">
           <div class="stat-value">Global</div>
-          <div class="stat-rotator" data-rotator>
+          <div class="stat-rotator" data-rotator aria-label="Clients in India, US, UK, Canada, Brazil, Norway, Sri Lanka and Bangladesh">
             <span class="active">India</span>
             <span>US</span>
             <span>UK</span>
@@ -103,253 +132,176 @@
     </div>
   </section>
 
-  <!-- Video Portfolio — category selection -->
-  <section id="work">
+  <!-- Portfolio -->
+  <section id="work" class="section">
     <div class="container">
-      <span class="eyebrow reveal">Video Portfolio</span>
-      <h2 class="reveal">Choose a category to view the video list.</h2>
+      <div class="section-head">
+        <span class="eyebrow reveal">Video Portfolio</span>
+        <h2 class="reveal">Selected work, by <em>category</em>.</h2>
+      </div>
 
-      <div class="category-grid reveal">
-        <article class="category-card featured" data-category-card="podcasts" tabindex="0" role="button">
-          <div class="category-thumb" style="--card-bg: url('https://img.youtube.com/vi/Z94vn0pTewg/hqdefault.jpg')">
-          </div>
+      <div class="category-grid reveal-group">
+        <article class="category-card featured" data-category-card="podcasts" tabindex="0" role="button" aria-label="Open Podcast videos">
+          <div class="category-thumb"><img loading="lazy" src="https://img.youtube.com/vi/Z94vn0pTewg/hqdefault.jpg" alt="" /></div>
           <div class="category-body">
+            <span class="category-index">01</span>
             <h3>Podcast</h3>
             <p>Hours of raw footage into smooth, one-hour podcast edits — recorded on Riverside, cleaned up, captioned, and packaged for release.</p>
-            <button class="category-action" type="button" data-open-category="podcasts">View podcast list →</button>
+            <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
 
-        <article class="category-card" data-category-card="reels" tabindex="0" role="button">
-          <div class="category-thumb" style="--card-bg: url('https://img.youtube.com/vi/Be9Mi1yvJ-Q/hqdefault.jpg')">
-          </div>
+        <article class="category-card" data-category-card="reels" tabindex="0" role="button" aria-label="Open Reels and Shorts">
+          <div class="category-thumb"><img loading="lazy" src="https://img.youtube.com/vi/Be9Mi1yvJ-Q/hqdefault.jpg" alt="" /></div>
           <div class="category-body">
-            <h3>Reels/Shorts</h3>
+            <span class="category-index">02</span>
+            <h3>Reels / Shorts</h3>
             <p>Short-form vertical edits for FB, IG, and YT ads — fast hooks, tight pacing, and social-first attention.</p>
-            <button class="category-action" type="button" data-open-category="reels">View reels list →</button>
+            <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
 
-        <article class="category-card" data-category-card="films-events" tabindex="0" role="button">
-          <div class="category-thumb" style="--card-bg: url('https://img.youtube.com/vi/ZZP_Iu7-WDM/hqdefault.jpg')">
-          </div>
+        <article class="category-card" data-category-card="films-events" tabindex="0" role="button" aria-label="Open Films and Events">
+          <div class="category-thumb"><img loading="lazy" src="https://img.youtube.com/vi/ZZP_Iu7-WDM/hqdefault.jpg" alt="" /></div>
           <div class="category-body">
+            <span class="category-index">03</span>
             <h3>Films &amp; Events</h3>
             <p>Short films, event coverage, and summit recaps shaped around real moments and clean pacing.</p>
-            <button class="category-action" type="button" data-open-category="films-events">View films &amp; events list →</button>
+            <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
 
-        <article class="category-card" data-category-card="corporate" tabindex="0" role="button">
-          <div class="category-thumb" style="--card-bg: url('https://img.youtube.com/vi/WErc62GzhsM/hqdefault.jpg')">
-          </div>
+        <article class="category-card" data-category-card="corporate" tabindex="0" role="button" aria-label="Open Corporate Videos">
+          <div class="category-thumb"><img loading="lazy" src="https://img.youtube.com/vi/WErc62GzhsM/hqdefault.jpg" alt="" /></div>
           <div class="category-body">
+            <span class="category-index">04</span>
             <h3>Corporate Videos</h3>
             <p>Business videos, explainers, testimonials, event recaps, and brand films.</p>
-            <button class="category-action" type="button" data-open-category="corporate">View corporate list →</button>
+            <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
 
-        <article class="category-card" data-category-card="vox" tabindex="0" role="button">
-          <div class="category-thumb" style="--card-bg: url('https://img.youtube.com/vi/DHfRMLihR18/hqdefault.jpg')">
-          </div>
+        <article class="category-card" data-category-card="vox" tabindex="0" role="button" aria-label="Open Talking-head videos">
+          <div class="category-thumb"><img loading="lazy" src="https://img.youtube.com/vi/DHfRMLihR18/hqdefault.jpg" alt="" /></div>
           <div class="category-body">
-            <h3>Talking-head video editing</h3>
+            <span class="category-index">05</span>
+            <h3>Talking-head Editing</h3>
             <p>Story-led explainer edits with kinetic captions, atmosphere, real voices, and deeper narrative structure.</p>
-            <button class="category-action" type="button" data-open-category="vox">View list →</button>
+            <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
 
-        <article class="category-card" data-category-card="motion-saas" tabindex="0" role="button">
-          <div class="category-thumb" style="--card-bg: url('https://img.youtube.com/vi/cIy0pgm-Ols/hqdefault.jpg')">
-          </div>
+        <article class="category-card" data-category-card="motion-saas" tabindex="0" role="button" aria-label="Open Motion Graphics and SaaS videos">
+          <div class="category-thumb"><img loading="lazy" src="https://img.youtube.com/vi/cIy0pgm-Ols/hqdefault.jpg" alt="" /></div>
           <div class="category-body">
-            <h3>Motion Graphics / SaaS Style</h3>
+            <span class="category-index">06</span>
+            <h3>Motion Graphics / SaaS</h3>
             <p>UI animation, explainers, kinetic typography, infographics, and SaaS-style product motion.</p>
-            <button class="category-action" type="button" data-open-category="motion-saas">View motion list →</button>
+            <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- Skills -->
-  <!-- Services + Process — merged, hover-linked -->
-  <section id="services">
+  <!-- Services + Process -->
+  <section id="services" class="section">
     <div class="container">
-      <span class="eyebrow reveal">Core Services &amp; Process</span>
-      <h2 class="reveal">One editor, every stage of production.</h2>
+      <div class="section-head">
+        <span class="eyebrow reveal">Core Services &amp; Process</span>
+        <h2 class="reveal">One editor, <em>every</em> stage of production.</h2>
+      </div>
 
-      <div class="service-grid reveal" data-service-grid>
-        <article class="service-card" data-service="long-form" data-steps="1,2,3,4,5,6">
-          <div class="project-topline"><span>01</span></div>
+      <div class="service-list" data-service-grid>
+        <article class="service-row reveal" data-steps="1,2,3,4,5,6">
+          <span class="service-num">01</span>
           <h3>Long-form Video Editing</h3>
           <p>YouTube videos, podcasts, educational videos, business videos, documentary style, talking-head videos.</p>
         </article>
-        <article class="service-card" data-service="short-form" data-steps="1,3,4,6">
-          <div class="project-topline"><span>02</span></div>
+        <article class="service-row reveal" data-steps="1,3,4,6">
+          <span class="service-num">02</span>
           <h3>Short-form Content</h3>
           <p>Instagram Reels, YouTube Shorts, TikTok, LinkedIn videos.</p>
         </article>
-        <article class="service-card" data-service="motion" data-steps="1,3,4,5,6">
-          <div class="project-topline"><span>03</span></div>
+        <article class="service-row reveal" data-steps="1,3,4,5,6">
+          <span class="service-num">03</span>
           <h3>Motion Graphics</h3>
           <p>UI animation, data visualization, kinetic typography, infographics, logo animation, corporate motion design.</p>
         </article>
-        <article class="service-card" data-service="ai" data-steps="2,3,6">
-          <div class="project-topline"><span>04</span></div>
+        <article class="service-row reveal" data-steps="2,3,6">
+          <span class="service-num">04</span>
           <h3>AI Video Workflow</h3>
           <p>AI voice enhancement, AI image generation, AI-assisted editing, AI asset creation, AI video enhancement.</p>
         </article>
-        <article class="service-card" data-service="immersive" data-steps="1,2,3,4,5,6">
-          <div class="project-topline"><span>05</span></div>
-          <h3>360°/Immersive Video</h3>
+        <article class="service-row reveal" data-steps="1,2,3,4,5,6">
+          <span class="service-num">05</span>
+          <h3>360° / Immersive Video</h3>
           <p>360° capture-aware editing and immersive video formats for events and brand experiences.</p>
         </article>
       </div>
 
-      <div class="process-link-rail reveal">
-        <span class="rail-line"></span>
-        <span>How it flows</span>
-        <span class="rail-line"></span>
-      </div>
-
-      <div class="process-list reveal" data-process-list>
-        <article data-step="1"><span>01</span><h4>Discovery</h4></article>
-        <article data-step="2"><span>02</span><h4>File Sharing</h4></article>
-        <article data-step="3"><span>03</span><h4>Editing</h4></article>
-        <article data-step="4"><span>04</span><h4>Review</h4></article>
-        <article data-step="5"><span>05</span><h4>Revisions</h4></article>
-        <article data-step="6"><span>06</span><h4>Final Delivery</h4></article>
+      <div class="process reveal">
+        <span class="process-label">How it flows</span>
+        <ol class="process-list" data-process-list>
+          <li data-step="1"><span>01</span>Discovery</li>
+          <li data-step="2"><span>02</span>File Sharing</li>
+          <li data-step="3"><span>03</span>Editing</li>
+          <li data-step="4"><span>04</span>Review</li>
+          <li data-step="5"><span>05</span>Revisions</li>
+          <li data-step="6"><span>06</span>Final Delivery</li>
+        </ol>
       </div>
     </div>
   </section>
 
-  <!-- Skills -->
-  <section id="about">
+  <!-- About -->
+  <section id="about" class="section">
     <div class="container">
-      <span class="eyebrow reveal">About</span>
-      <h2 class="reveal">About Founder</h2>
-      
-      <div class="about-intro reveal">
-        <p><strong>15+ years across video production, motion design, and brand content.</strong></p>
-        <p>A complete post-production skillset for modern content.</p>
-      </div>
-
-      <div class="skills-box reveal">
-        <ul class="skills-list">
-          <li>Video editing</li>
-          <li>Motion graphics</li>
-          <li>Podcast editing</li>
-          <li>YouTube retention editing</li>
-          <li>Kinetic typography</li>
-          <li>Sound design</li>
-          <li>Color correction / grading</li>
-          <li>Data visualization</li>
-          <li>AI-assisted workflows</li>
-          <li>Brand consistency</li>
-          <li>Corporate videos</li>
-          <li>Reels / Shorts editing</li>
-          <li>Long-form to short-form content</li>
-          <li>VFX / compositing</li>
-          <li>360° video editing</li>
-          <li>Visual storytelling</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Software & Tools -->
-  <section>
-    <div class="container">
-      <span class="eyebrow reveal">Software and Tools</span>
-      <h2 class="reveal">Built around modern editing tools, AI, and remote workflow.</h2>
-      <div class="tool-grid reveal">
-        <div class="tool-card">
-          <h3>Tools We Use</h3>
-          <p>Premiere Pro, After Effects, Photoshop, Illustrator, DaVinci Resolve Studio, Maya</p>
-          <div class="tool-icons">
-            <img src="./assets/icon-premiere.png" alt="Premiere Pro" onerror="this.remove()" />
-            <img src="./assets/icon-aftereffects.png" alt="After Effects" onerror="this.remove()" />
-            <img src="./assets/icon-photoshop.png" alt="Photoshop" onerror="this.remove()" />
-            <img src="./assets/icon-illustrator.png" alt="Illustrator" onerror="this.remove()" />
-            <img src="./assets/icon-davinci.png" alt="DaVinci Resolve" onerror="this.remove()" />
-            <img src="./assets/icon-maya.png" alt="Maya" onerror="this.remove()" />
-          </div>
+      <div class="split-head">
+        <div class="reveal">
+          <span class="eyebrow">About the Founder</span>
+          <h2>15+ years across video production, motion design, and <em>brand content</em>.</h2>
         </div>
-        <div class="tool-card">
-          <h3>AI Tools</h3>
-          <p>ChatGPT, Google Gemini, Runway, ComfyUI, Nano Banana Pro, ElevenLabs, Weavy AI, Adobe Firefly, Adobe Podcast, Google Veo</p>
-          <div class="tool-icons">
-            <img src="./assets/icon-chatgpt.png" alt="ChatGPT" onerror="this.remove()" />
-            <img src="./assets/icon-gemini.png" alt="Google Gemini" onerror="this.remove()" />
-            <img src="./assets/icon-runway.png" alt="Runway" onerror="this.remove()" />
-            <img src="./assets/icon-comfyui.png" alt="ComfyUI" onerror="this.remove()" />
-            <img src="./assets/icon-elevenlabs.png" alt="ElevenLabs" onerror="this.remove()" />
-            <img src="./assets/icon-firefly.png" alt="Adobe Firefly" onerror="this.remove()" />
-            <img src="./assets/icon-veo.png" alt="Google Veo" onerror="this.remove()" />
-          </div>
-        </div>
-        <div class="tool-card">
-          <h3>Collaboration</h3>
-          <p>Frame.io, Google Drive, Slack, Discord, Notion, Trello</p>
-          <div class="tool-icons">
-            <img src="./assets/icon-frameio.png" alt="Frame.io" onerror="this.remove()" />
-            <img src="./assets/icon-googledrive.png" alt="Google Drive" onerror="this.remove()" />
-            <img src="./assets/icon-slack.png" alt="Slack" onerror="this.remove()" />
-            <img src="./assets/icon-discord.png" alt="Discord" onerror="this.remove()" />
-            <img src="./assets/icon-notion.png" alt="Notion" onerror="this.remove()" />
-            <img src="./assets/icon-trello.png" alt="Trello" onerror="this.remove()" />
-          </div>
-        </div>
+        <p class="reveal">Led by <strong>Santosh Panigrahi</strong>, founder of 26amFilms — a complete post-production skillset for modern content.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- Hire me on trusted platforms -->
-  <section id="hire-me">
-    <div class="container">
-      <span class="eyebrow reveal">Hire Me</span>
-      <h2 class="reveal">Also available on trusted freelance platforms.</h2>
-      <div class="platform-grid reveal">
-        <a class="platform-card" href="https://www.upwork.com/freelancers/santosh26?mp_source=share" target="_blank" rel="noopener">
-          <img class="platform-icon" src="./assets/icon-upwork.png" alt="" onerror="this.remove()" />
-          <h3>Upwork</h3>
-          <p>View profile →</p>
-        </a>
-        <a class="platform-card" href="https://www.fiverr.com/s/XLpb0DP" target="_blank" rel="noopener">
-          <img class="platform-icon" src="./assets/icon-fiverr.png" alt="" onerror="this.remove()" />
-          <h3>Fiverr</h3>
-          <p>View profile →</p>
-        </a>
-      </div>
-    </div>
-  </section>
+      <ul class="skills reveal-group">
+        <li>Video editing</li>
+        <li>Motion graphics</li>
+        <li>Podcast editing</li>
+        <li>YouTube retention editing</li>
+        <li>Kinetic typography</li>
+        <li>Sound design</li>
+        <li>Color correction / grading</li>
+        <li>Data visualization</li>
+        <li>AI-assisted workflows</li>
+        <li>Brand consistency</li>
+        <li>Corporate videos</li>
+        <li>Reels / Shorts editing</li>
+        <li>Long-form to short-form</li>
+        <li>VFX / compositing</li>
+        <li>360° video editing</li>
+        <li>Visual storytelling</li>
+      </ul>
 
-  <!-- Experience -->
-  <section id="experience">
-    <div class="container">
-      <span class="eyebrow reveal">Experience</span>
-      <h2 class="reveal">15+ years across video production, motion design, and brand content.</h2>
-      <p class="founder-line reveal">Led by <strong>Santosh Panigrahi</strong>, founder of 26amFilms.</p>
-
-      <div class="timeline reveal">
-        <article>
-          <span class="role-period">2025 – Present</span>
+      <!-- Experience -->
+      <div class="timeline" id="experience">
+        <article class="reveal">
+          <span class="role-period">2025 — Present</span>
           <h3>Full-time Freelance Video Editor &amp; Motion Designer</h3>
           <p>Working remotely with startups, agencies, and creators worldwide across long-form YouTube editing, podcast editing, motion graphics, short-form reels, explainer videos, and AI-enhanced production.</p>
         </article>
-        <article>
+        <article class="reveal">
           <span class="role-period">1Finance</span>
           <h3>Assistant Manager</h3>
           <p>Finance-focused educational content, motion graphics, financial explainers, data visualization, and brand-consistent editing.</p>
         </article>
-        <article>
+        <article class="reveal">
           <span class="role-period">Atomik Growth</span>
           <h3>Podcast Video Editor</h3>
           <p>Multi-camera podcast editing, audio cleanup, motion graphics, social clips, and branded visuals.</p>
         </article>
-        <article>
+        <article class="reveal">
           <span class="role-period">AAJ Media</span>
           <h3>Production Manager</h3>
           <p>Pre-production, video production, and post-production across varied video formats and delivery needs.</p>
@@ -358,136 +310,167 @@
     </div>
   </section>
 
-  <!-- Brands/Clients marquee + Ideal Clients -->
-  <section>
+  <!-- Tools -->
+  <section class="section">
     <div class="container">
-      <span class="eyebrow reveal">Trusted By</span>
-      <h2 class="reveal">Brands and clients I've worked with.</h2>
-
-      <div class="marquee-row reveal" aria-hidden="true">
-        <div class="marquee-track">
-          <div class="marquee-logo"><img src="./assets/logo-1finance.png" alt="1Finance" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-groww.png" alt="Groww" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-atomik.png" alt="Atomik Growth" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-eros.png" alt="Eros Universe" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-colors.png" alt="Colors" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-starsports.png" alt="Star Sports" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-plp.png" alt="PLP" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-fingrowth.png" alt="Fingrowth Media" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-panchanad.png" alt="Panchanad Veda Chronicle" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-atlas.png" alt="Atlas Agni Taj" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-liminal.png" alt="Liminal" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-1finance.png" alt="1Finance" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-groww.png" alt="Groww" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-atomik.png" alt="Atomik Growth" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-eros.png" alt="Eros Universe" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-colors.png" alt="Colors" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-starsports.png" alt="Star Sports" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-plp.png" alt="PLP" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-fingrowth.png" alt="Fingrowth Media" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-panchanad.png" alt="Panchanad Veda Chronicle" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-atlas.png" alt="Atlas Agni Taj" /></div>
-          <div class="marquee-logo"><img src="./assets/logo-liminal.png" alt="Liminal" /></div>
-        </div>
+      <div class="section-head">
+        <span class="eyebrow reveal">Software &amp; Tools</span>
+        <h2 class="reveal">Modern editing tools, AI, and a <em>remote-first</em> workflow.</h2>
       </div>
-
-      <div class="marquee-row reverse reveal" aria-hidden="true">
-        <div class="marquee-track">
-          <div class="testimonial-card">
-            <span class="testimonial-stars">★★★★★ 4.8</span>
-            <p>"Incredibly professional and polite throughout the project. Delivered high-quality work on time and was always responsive and cooperative."</p>
-            <span class="testimonial-source">Upwork — Documentary Style Video Editor</span>
+      <div class="tool-grid reveal-group">
+        <div class="tool-card">
+          <h3>Editing &amp; Design</h3>
+          <div class="tool-icons">
+            <img src="./assets/icon-premiere.png" alt="Premiere Pro" title="Premiere Pro" />
+            <img src="./assets/icon-aftereffects.png" alt="After Effects" title="After Effects" />
+            <img src="./assets/icon-photoshop.png" alt="Photoshop" title="Photoshop" />
+            <img src="./assets/icon-illustrator.png" alt="Illustrator" title="Illustrator" />
+            <img src="./assets/icon-davinci.png" alt="DaVinci Resolve" title="DaVinci Resolve" />
+            <img src="./assets/icon-maya.png" alt="Maya" title="Maya" />
           </div>
-          <div class="testimonial-card">
-            <span class="testimonial-stars">★★★★★ 4.7</span>
-            <p>"Quickly understood the vision and delivered high-quality edits. His creativity, attention to detail, and adherence to deadlines made the process stress-free."</p>
-            <span class="testimonial-source">Upwork — Podcast Video Editor</span>
-          </div>
-          <div class="testimonial-card">
-            <span class="testimonial-stars">★★★★★ 5.0</span>
-            <p>"Amazing guy! Highly recommended and responsive."</p>
-            <span class="testimonial-source">Upwork — Clip Editing</span>
-          </div>
-          <div class="testimonial-card">
-            <span class="testimonial-stars">★★★★★</span>
-            <p>"Will continue working with him for sure."</p>
-            <span class="testimonial-source">Fiverr — toetool, United States</span>
-          </div>
-          <div class="testimonial-card">
-            <span class="testimonial-stars">★★★★★</span>
-            <p>"Thank you brother — will always revert back to you, very professional."</p>
-            <span class="testimonial-source">Fiverr — krlshs235, India</span>
-          </div>
-          <div class="testimonial-card">
-            <span class="testimonial-stars">★★★★★ 4.8</span>
-            <p>"Incredibly professional and polite throughout the project. Delivered high-quality work on time and was always responsive and cooperative."</p>
-            <span class="testimonial-source">Upwork — Documentary Style Video Editor</span>
-          </div>
-          <div class="testimonial-card">
-            <span class="testimonial-stars">★★★★★ 4.7</span>
-            <p>"Quickly understood the vision and delivered high-quality edits. His creativity, attention to detail, and adherence to deadlines made the process stress-free."</p>
-            <span class="testimonial-source">Upwork — Podcast Video Editor</span>
-          </div>
-          <div class="testimonial-card">
-            <span class="testimonial-stars">★★★★★ 5.0</span>
-            <p>"Amazing guy! Highly recommended and responsive."</p>
-            <span class="testimonial-source">Upwork — Clip Editing</span>
-          </div>
-          <div class="testimonial-card">
-            <span class="testimonial-stars">★★★★★</span>
-            <p>"Will continue working with him for sure."</p>
-            <span class="testimonial-source">Fiverr — toetool, United States</span>
-          </div>
-          <div class="testimonial-card">
-            <span class="testimonial-stars">★★★★★</span>
-            <p>"Thank you brother — will always revert back to you, very professional."</p>
-            <span class="testimonial-source">Fiverr — krlshs235, India</span>
-          </div>
+          <p>Premiere Pro, After Effects, Photoshop, Illustrator, DaVinci Resolve Studio, Maya</p>
         </div>
-      </div>
-
-      <div class="ideal-clients reveal">
-        <span class="eyebrow">Ideal Clients</span>
-        <h2>Built for brands, creators, and teams that need clear, polished, consistent video content.</h2>
-        <div class="client-list">
-          <span>Finance &amp; FinTech</span>
-          <span>AI startups</span>
-          <span>SaaS companies</span>
-          <span>YouTube creators</span>
-          <span>Business coaches</span>
-          <span>Marketing agencies</span>
-          <span>Podcast hosts</span>
-          <span>Personal brands</span>
-          <span>Educational creators</span>
+        <div class="tool-card">
+          <h3>AI Tools</h3>
+          <div class="tool-icons">
+            <img src="./assets/icon-chatgpt.png" alt="ChatGPT" title="ChatGPT" />
+            <img src="./assets/icon-gemini.png" alt="Google Gemini" title="Google Gemini" />
+            <img src="./assets/icon-runway.png" alt="Runway" title="Runway" />
+            <img src="./assets/icon-comfyui.png" alt="ComfyUI" title="ComfyUI" />
+            <img src="./assets/icon-elevenlabs.png" alt="ElevenLabs" title="ElevenLabs" />
+            <img src="./assets/icon-firefly.png" alt="Adobe Firefly" title="Adobe Firefly" />
+          </div>
+          <p>ChatGPT, Google Gemini, Runway, ComfyUI, Nano Banana Pro, ElevenLabs, Weavy AI, Adobe Firefly, Adobe Podcast, Google Veo</p>
+        </div>
+        <div class="tool-card">
+          <h3>Collaboration</h3>
+          <div class="tool-icons">
+            <img src="./assets/icon-frameio.png" alt="Frame.io" title="Frame.io" />
+            <img src="./assets/icon-googledrive.png" alt="Google Drive" title="Google Drive" />
+            <img src="./assets/icon-slack.png" alt="Slack" title="Slack" />
+            <img src="./assets/icon-discord.png" alt="Discord" title="Discord" />
+            <img src="./assets/icon-notion.png" alt="Notion" title="Notion" />
+            <img src="./assets/icon-trello.png" alt="Trello" title="Trello" />
+          </div>
+          <p>Frame.io, Google Drive, Slack, Discord, Notion, Trello</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Trusted by -->
+  <section class="section trusted">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow reveal">Trusted By</span>
+        <h2 class="reveal">Brands and clients I've <em>worked with</em>.</h2>
+      </div>
+    </div>
+
+    <div class="marquee reveal" data-marquee aria-label="Client logos">
+      <div class="marquee-track">
+        <div class="marquee-logo"><img src="./assets/logo-1finance.png" alt="1Finance" /></div>
+        <div class="marquee-logo"><img src="./assets/logo-groww.png" alt="Groww" /></div>
+        <div class="marquee-logo"><img src="./assets/logo-atomik.png" alt="Atomik Growth" /></div>
+        <div class="marquee-logo"><img src="./assets/logo-eros.png" alt="Eros Universe" /></div>
+        <div class="marquee-logo"><img src="./assets/logo-colors.png" alt="Colors" /></div>
+        <div class="marquee-logo"><img src="./assets/logo-starsports.png" alt="Star Sports" /></div>
+        <div class="marquee-logo"><img src="./assets/logo-plp.png" alt="PLP" /></div>
+        <div class="marquee-logo"><img src="./assets/logo-fingrowth.png" alt="Fingrowth Media" /></div>
+        <div class="marquee-logo"><img src="./assets/logo-panchanad.png" alt="Panchanad Veda Chronicle" /></div>
+        <div class="marquee-logo"><img src="./assets/logo-atlas.png" alt="Atlas Agni Taj" /></div>
+        <div class="marquee-logo"><img src="./assets/logo-liminal.png" alt="Liminal" /></div>
+      </div>
+    </div>
+
+    <div class="marquee reverse reveal" data-marquee aria-label="Client reviews">
+      <div class="marquee-track">
+        <figure class="testimonial">
+          <span class="stars">★★★★★ 4.8</span>
+          <blockquote>"Incredibly professional and polite throughout the project. Delivered high-quality work on time and was always responsive and cooperative."</blockquote>
+          <figcaption>Upwork — Documentary Style Video Editor</figcaption>
+        </figure>
+        <figure class="testimonial">
+          <span class="stars">★★★★★ 4.7</span>
+          <blockquote>"Quickly understood the vision and delivered high-quality edits. His creativity, attention to detail, and adherence to deadlines made the process stress-free."</blockquote>
+          <figcaption>Upwork — Podcast Video Editor</figcaption>
+        </figure>
+        <figure class="testimonial">
+          <span class="stars">★★★★★ 5.0</span>
+          <blockquote>"Amazing guy! Highly recommended and responsive."</blockquote>
+          <figcaption>Upwork — Clip Editing</figcaption>
+        </figure>
+        <figure class="testimonial">
+          <span class="stars">★★★★★</span>
+          <blockquote>"Will continue working with him for sure."</blockquote>
+          <figcaption>Fiverr — toetool, United States</figcaption>
+        </figure>
+        <figure class="testimonial">
+          <span class="stars">★★★★★</span>
+          <blockquote>"Thank you brother — will always revert back to you, very professional."</blockquote>
+          <figcaption>Fiverr — krlshs235, India</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="ideal-clients reveal">
+        <span class="eyebrow">Ideal Clients</span>
+        <h3>Built for brands, creators, and teams that need clear, polished, consistent video content.</h3>
+        <ul class="client-list">
+          <li>Finance &amp; FinTech</li>
+          <li>AI startups</li>
+          <li>SaaS companies</li>
+          <li>YouTube creators</li>
+          <li>Business coaches</li>
+          <li>Marketing agencies</li>
+          <li>Podcast hosts</li>
+          <li>Personal brands</li>
+          <li>Educational creators</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hire me -->
+  <section id="hire-me" class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow reveal">Hire Me</span>
+        <h2 class="reveal">Also available on trusted <em>freelance platforms</em>.</h2>
+      </div>
+      <div class="platform-list">
+        <a class="platform-row reveal" href="https://www.upwork.com/freelancers/santosh26?mp_source=share" target="_blank" rel="noopener">
+          <img src="./assets/icon-upwork.png" alt="" />
+          <span class="platform-name">Upwork</span>
+          <span class="platform-cta">View profile <i aria-hidden="true">↗</i></span>
+        </a>
+        <a class="platform-row reveal" href="https://www.fiverr.com/s/XLpb0DP" target="_blank" rel="noopener">
+          <img src="./assets/icon-fiverr.png" alt="" />
+          <span class="platform-name">Fiverr</span>
+          <span class="platform-cta">View profile <i aria-hidden="true">↗</i></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- Contact -->
-  <section id="contact">
+  <section id="contact" class="section contact">
     <div class="container">
       <div class="contact-grid">
         <div class="reveal">
           <span class="eyebrow">Contact</span>
-          <h2>Need a sharp editor for your next video?</h2>
+          <h2 class="contact-title">Need a sharp editor for your <em>next video?</em></h2>
           <p>Send the project details, platform, timeline, and a sample reference. I'll get back with the next steps.</p>
 
-          <div class="contact-links">
-            <a href="mailto:hello@26amfilms.com">Email</a>
-            <a href="https://wa.me/919967773638" target="_blank" rel="noopener">
-              <img class="link-icon" src="./assets/icon-whatsapp.png" alt="" onerror="this.style.display='none'" />WhatsApp
-            </a>
-            <a href="https://calendar.app.google/VgQrEWxaVizVQtqo8" target="_blank" rel="noopener">Schedule a Google Meet</a>
-          </div>
+          <ul class="contact-links">
+            <li><a href="mailto:hello@26amfilms.com"><span>Email</span><i aria-hidden="true">↗</i></a></li>
+            <li><a href="https://wa.me/919967773638" target="_blank" rel="noopener"><span>WhatsApp</span><i aria-hidden="true">↗</i></a></li>
+            <li><a href="https://calendar.app.google/VgQrEWxaVizVQtqo8" target="_blank" rel="noopener"><span>Schedule a Google Meet</span><i aria-hidden="true">↗</i></a></li>
+            <li><a href="https://www.linkedin.com/in/santoshp26/" target="_blank" rel="noopener"><span>LinkedIn</span><i aria-hidden="true">↗</i></a></li>
+          </ul>
 
-          <div class="contact-links social-row">
-            <a href="https://www.linkedin.com/in/santoshp26/" target="_blank" rel="noopener">
-              <img class="link-icon" src="./assets/icon-linkedin.png" alt="" onerror="this.style.display='none'" />LinkedIn
-            </a>
-          </div>
-
-          <a href="#" data-placeholder-link class="settle-up-button">
+          <a href="#" data-placeholder-link class="settle-up">
             <span class="settle-up-icon">$</span>
             Already working together? Settle up here.
           </a>
@@ -496,64 +479,64 @@
         <form class="contact-form reveal" data-contact-form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
           <input type="hidden" name="form-name" value="contact" />
           <p class="honeypot-field"><label>Don't fill this out if you're human: <input name="bot-field" /></label></p>
-          <div class="contact-form-row">
-            <label><span>Name</span><input type="text" name="name" required /></label>
-            <label><span>Email</span><input type="email" name="email" required /></label>
-          </div>
-          <label><span>Project</span><textarea name="message" rows="4" required></textarea></label>
-          <button class="button primary" type="submit">Send Inquiry</button>
+          <label class="field"><input type="text" name="name" placeholder=" " required /><span>Name</span></label>
+          <label class="field"><input type="email" name="email" placeholder=" " required /><span>Email</span></label>
+          <label class="field"><textarea name="message" rows="4" placeholder=" " required></textarea><span>Tell me about the project</span></label>
+          <button class="button solid wide" type="submit">Send Inquiry <i aria-hidden="true">→</i></button>
           <p class="form-status" data-form-status hidden></p>
         </form>
       </div>
     </div>
   </section>
 
-  <!-- FAQ Section -->
-  <section id="faq">
-    <div class="container">
-      <span class="eyebrow reveal">FAQ</span>
-      <h2 class="reveal">Frequently Asked Questions</h2>
-      <div class="faq-grid reveal">
-        <article class="faq-item">
-          <h3>What kind of projects do you take on?</h3>
-          <p>Podcasts, YouTube long-form, corporate videos, motion graphics, reels/shorts, and talking-head edits — solo creators to brands and agencies.</p>
-        </article>
-        <article class="faq-item">
-          <h3>What's your turnaround time?</h3>
-          <p>Depends on scope, but most single videos land in 3–5 business days. Ongoing podcast/content work runs on a set weekly schedule once we lock a workflow.</p>
-        </article>
-        <article class="faq-item">
-          <h3>How do we get started?</h3>
-          <p>Message me on Email or WhatsApp, or book a slot on the Schedule a Google Meet link. We'll talk scope, timeline, and budget before anything starts.</p>
-        </article>
-        <article class="faq-item">
-          <h3>How many revisions are included?</h3>
-          <p>Usually 2 rounds of revisions per project, built into the quote. More rounds can be added if needed.</p>
-        </article>
-        <article class="faq-item">
-          <h3>Do you work with international clients?</h3>
-          <p>Yes — remote, async-friendly, comfortable across time zones. Most communication happens over email/WhatsApp/Google Meet.</p>
-        </article>
-        <article class="faq-item">
-          <h3>What software do you use?</h3>
-          <p>Premiere Pro, After Effects, DaVinci Resolve, Photoshop, Illustrator — plus AI tools like ChatGPT, Runway, and ElevenLabs where they speed things up without cutting corners.</p>
-        </article>
-        <article class="faq-item">
-          <h3>Can you handle rush jobs?</h3>
-          <p>Sometimes, depending on current workload — flag it as urgent when you reach out and I'll tell you honestly if it's doable.</p>
-        </article>
-        <article class="faq-item">
-          <h3>Do you offer ongoing/retainer work?</h3>
-          <p>Yes, for podcasts or channels with regular editing needs — worth a call to figure out the right setup.</p>
-        </article>
-        <article class="faq-item">
-          <h3>What's your budget range?</h3>
-          <p>Depends on complexity, duration, platform, format, and style.</p>
-        </article>
-        <article class="faq-item">
-          <h3>What do you need from me to start a project?</h3>
-          <p>Raw footage/audio, script, any brand guidelines, reference videos you like, and a rough idea of the final format (YouTube, Shorts, etc.).</p>
-        </article>
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="container faq-layout">
+      <div class="section-head">
+        <span class="eyebrow reveal">FAQ</span>
+        <h2 class="reveal">Frequently asked <em>questions</em>.</h2>
+      </div>
+      <div class="faq-list" data-faq>
+        <div class="faq-item reveal">
+          <button type="button" aria-expanded="false"><span>What kind of projects do you take on?</span><i aria-hidden="true"></i></button>
+          <div class="faq-answer"><div><p>Podcasts, YouTube long-form, corporate videos, motion graphics, reels/shorts, and talking-head edits — solo creators to brands and agencies.</p></div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button type="button" aria-expanded="false"><span>What's your turnaround time?</span><i aria-hidden="true"></i></button>
+          <div class="faq-answer"><div><p>Depends on scope, but most single videos land in 3–5 business days. Ongoing podcast/content work runs on a set weekly schedule once we lock a workflow.</p></div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button type="button" aria-expanded="false"><span>How do we get started?</span><i aria-hidden="true"></i></button>
+          <div class="faq-answer"><div><p>Message me on Email or WhatsApp, or book a slot on the Schedule a Google Meet link. We'll talk scope, timeline, and budget before anything starts.</p></div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button type="button" aria-expanded="false"><span>How many revisions are included?</span><i aria-hidden="true"></i></button>
+          <div class="faq-answer"><div><p>Usually 2 rounds of revisions per project, built into the quote. More rounds can be added if needed.</p></div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button type="button" aria-expanded="false"><span>Do you work with international clients?</span><i aria-hidden="true"></i></button>
+          <div class="faq-answer"><div><p>Yes — remote, async-friendly, comfortable across time zones. Most communication happens over email/WhatsApp/Google Meet.</p></div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button type="button" aria-expanded="false"><span>What software do you use?</span><i aria-hidden="true"></i></button>
+          <div class="faq-answer"><div><p>Premiere Pro, After Effects, DaVinci Resolve, Photoshop, Illustrator — plus AI tools like ChatGPT, Runway, and ElevenLabs where they speed things up without cutting corners.</p></div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button type="button" aria-expanded="false"><span>Can you handle rush jobs?</span><i aria-hidden="true"></i></button>
+          <div class="faq-answer"><div><p>Sometimes, depending on current workload — flag it as urgent when you reach out and I'll tell you honestly if it's doable.</p></div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button type="button" aria-expanded="false"><span>Do you offer ongoing/retainer work?</span><i aria-hidden="true"></i></button>
+          <div class="faq-answer"><div><p>Yes, for podcasts or channels with regular editing needs — worth a call to figure out the right setup.</p></div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button type="button" aria-expanded="false"><span>What's your budget range?</span><i aria-hidden="true"></i></button>
+          <div class="faq-answer"><div><p>Depends on complexity, duration, platform, format, and style.</p></div></div>
+        </div>
+        <div class="faq-item reveal">
+          <button type="button" aria-expanded="false"><span>What do you need from me to start a project?</span><i aria-hidden="true"></i></button>
+          <div class="faq-answer"><div><p>Raw footage/audio, script, any brand guidelines, reference videos you like, and a rough idea of the final format (YouTube, Shorts, etc.).</p></div></div>
+        </div>
       </div>
     </div>
   </section>
@@ -561,73 +544,17 @@
 </div>
 <!-- ============================ END MAIN VIEW ============================ -->
 
-<!-- Floating FAQ Button -->
-<button class="faq-fab" type="button" data-faq-button aria-label="Open FAQ" title="FAQ">?</button>
-
-<!-- FAQ Modal -->
-<div class="faq-modal" data-faq-modal aria-hidden="true">
-  <div class="faq-modal-backdrop" data-faq-modal-close></div>
-  <div class="faq-modal-panel">
-    <button class="modal-close" type="button" data-faq-modal-close aria-label="Close FAQ">×</button>
-    <div class="faq-modal-content">
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-modal-grid">
-        <article class="faq-modal-item">
-          <h3>What kind of projects do you take on?</h3>
-          <p>Podcasts, YouTube long-form, corporate videos, motion graphics, reels/shorts, and talking-head edits — solo creators to brands and agencies.</p>
-        </article>
-        <article class="faq-modal-item">
-          <h3>What's your turnaround time?</h3>
-          <p>Depends on scope, but most single videos land in 3–5 business days. Ongoing podcast/content work runs on a set weekly schedule once we lock a workflow.</p>
-        </article>
-        <article class="faq-modal-item">
-          <h3>How do we get started?</h3>
-          <p>Message me on Email or WhatsApp, or book a slot on the Schedule a Google Meet link. We'll talk scope, timeline, and budget before anything starts.</p>
-        </article>
-        <article class="faq-modal-item">
-          <h3>How many revisions are included?</h3>
-          <p>Usually 2 rounds of revisions per project, built into the quote. More rounds can be added if needed.</p>
-        </article>
-        <article class="faq-modal-item">
-          <h3>Do you work with international clients?</h3>
-          <p>Yes — remote, async-friendly, comfortable across time zones. Most communication happens over email/WhatsApp/Google Meet.</p>
-        </article>
-        <article class="faq-modal-item">
-          <h3>What software do you use?</h3>
-          <p>Premiere Pro, After Effects, DaVinci Resolve, Photoshop, Illustrator — plus AI tools like ChatGPT, Runway, and ElevenLabs where they speed things up without cutting corners.</p>
-        </article>
-        <article class="faq-modal-item">
-          <h3>Can you handle rush jobs?</h3>
-          <p>Sometimes, depending on current workload — flag it as urgent when you reach out and I'll tell you honestly if it's doable.</p>
-        </article>
-        <article class="faq-modal-item">
-          <h3>Do you offer ongoing/retainer work?</h3>
-          <p>Yes, for podcasts or channels with regular editing needs — worth a call to figure out the right setup.</p>
-        </article>
-        <article class="faq-modal-item">
-          <h3>What's your budget range?</h3>
-          <p>Depends on complexity, duration, platform, format, and style.</p>
-        </article>
-        <article class="faq-modal-item">
-          <h3>What do you need from me to start a project?</h3>
-          <p>Raw footage/audio, script, any brand guidelines, reference videos you like, and a rough idea of the final format (YouTube, Shorts, etc.).</p>
-        </article>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- ============================ CATEGORY VIEW ============================ -->
 <div data-view="category">
   <section class="category-hero">
     <div class="container">
-      <button class="back-link" type="button" data-back-to-main>← Back to portfolio</button>
+      <button class="back-link" type="button" data-back-to-main><i aria-hidden="true">←</i> Back to portfolio</button>
       <h2 data-category-title>Category</h2>
       <p data-category-description></p>
       <p class="category-meta" data-category-count></p>
     </div>
   </section>
-  <section>
+  <section class="category-videos">
     <div class="container">
       <div class="video-grid" data-category-grid></div>
     </div>
@@ -637,24 +564,27 @@
 
 </main>
 
+<a class="faq-fab" href="#faq" aria-label="Jump to FAQ" title="FAQ">?</a>
+
 <footer class="site-footer">
   <div class="container">
-    <div class="footer-brand">
-      <img src="./assets/26am-wide-logo.png" alt="26amFilms" onerror="this.style.display='none'" />
-      <div class="footer-brand-text">
-        <strong class="sr-only">26amFilms</strong>
-        <span>A studio by Santosh Panigrahi</span>
-      </div>
+    <div class="footer-top">
+      <a class="footer-cta" href="#contact">Let's make something <em>worth watching</em> <i aria-hidden="true">→</i></a>
     </div>
-    <span class="footer-meta">Video Editor | Motion Graphics Designer</span>
+    <div class="footer-wordmark" aria-hidden="true">26amFilms</div>
+    <div class="footer-bottom">
+      <span>A studio by Santosh Panigrahi</span>
+      <span>Video Editor · Motion Graphics Designer</span>
+      <span>© <span data-year>2026</span> 26amFilms</span>
+    </div>
   </div>
 </footer>
 
 <!-- Video modal -->
 <div class="video-modal" data-video-modal aria-hidden="true">
   <div class="video-modal-backdrop" data-close-video></div>
-  <div class="video-modal-panel" data-video-panel>
-    <button class="modal-close" type="button" data-close-video>Close</button>
+  <div class="video-modal-panel" data-video-panel role="dialog" aria-modal="true" aria-label="Video player">
+    <button class="modal-close" type="button" data-close-video aria-label="Close video">×</button>
     <iframe data-video-frame title="Video player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
   </div>
 </div>

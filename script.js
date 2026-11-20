@@ -4,168 +4,196 @@
 const root = document.documentElement;
 const body = document.body;
 const header = document.querySelector("[data-header]");
-const themeToggle = document.querySelector("[data-theme-toggle]");
-const progress = document.querySelector("[data-scroll-progress]");
-const navLinks = document.querySelectorAll(".main-nav a");
-const revealItems = document.querySelectorAll(".reveal");
-const counters = document.querySelectorAll("[data-counter]");
-const rotator = document.querySelector("[data-rotator]");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const VIEW_EXIT_MS = prefersReducedMotion ? 0 : 380;
 
 body.classList.add("motion-ready");
 
-/* ---------- Theme ---------- */
-const savedTheme = localStorage.getItem("26amfilms-theme");
-if (savedTheme) {
-  root.dataset.theme = savedTheme;
-}
-
-themeToggle?.addEventListener("click", () => {
-  const next = root.dataset.theme === "light" ? "dark" : "light";
-  root.dataset.theme = next;
-  localStorage.setItem("26amfilms-theme", next);
-});
-
-/* ---------- Scroll progress + header state ---------- */
-const updateScrollState = () => {
-  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-  const ratio = maxScroll > 0 ? window.scrollY / maxScroll : 0;
-  root.style.setProperty("--progress", ratio.toString());
-  root.style.setProperty("--hero-shift", Math.min(window.scrollY * 0.12, 80).toString());
-  header?.classList.toggle("scrolled", window.scrollY > 10);
+const storage = {
+  get(key) { try { return localStorage.getItem(key); } catch { return null; } },
+  set(key, value) { try { localStorage.setItem(key, value); } catch { /* private mode */ } },
 };
 
-window.addEventListener("scroll", updateScrollState, { passive: true });
-updateScrollState();
+/* ---------- Theme (black ↔ white) ---------- */
+const savedTheme = storage.get("26amfilms-theme");
+if (savedTheme) root.dataset.theme = savedTheme;
 
-/* ---------- Lenis smooth scroll ----------
-   Kept deliberately fast/responsive: a low duration + wheelMultiplier of 1
-   means a single scroll tick moves the page right away, with only a brief,
-   subtle glide afterward — not slow motion. */
+document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+  const next = root.dataset.theme === "light" ? "dark" : "light";
+  root.dataset.theme = next;
+  storage.set("26amfilms-theme", next);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "light" ? "#ffffff" : "#000000");
+});
+
+/* ---------- Lenis smooth scroll ---------- */
 const lenis = prefersReducedMotion || typeof Lenis === "undefined"
   ? null
-  : new Lenis({
-      duration: 1.0,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-      smoothWheel: true,
-    });
+  : new Lenis({ lerp: 0.085, wheelMultiplier: 1, touchMultiplier: 1.5, smoothWheel: true });
 
 if (lenis) {
-  const raf = (time) => {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  };
+  const raf = (time) => { lenis.raf(time); requestAnimationFrame(raf); };
   requestAnimationFrame(raf);
-  lenis.on("scroll", updateScrollState);
 }
 
-const scrollToPosition = (top, { immediate = false } = {}) => {
+const scrollToTarget = (target, { immediate = false } = {}) => {
   if (lenis) {
-    lenis.scrollTo(top, { immediate });
+    lenis.scrollTo(target, { immediate, duration: 1.4, easing: (t) => 1 - Math.pow(1 - t, 4) });
   } else {
-    window.scrollTo({ top, behavior: "auto" });
+    const top = typeof target === "number" ? target : target.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top, behavior: immediate || prefersReducedMotion ? "auto" : "smooth" });
   }
 };
 
+const lockScroll = (locked) => {
+  if (lenis) locked ? lenis.stop() : lenis.start();
+  body.style.overflow = locked ? "hidden" : "";
+};
+
+/* ---------- Scroll state: progress, header hide/show, hero parallax ---------- */
+const faqFab = document.querySelector(".faq-fab");
+const faqSection = document.querySelector("#faq");
+let lastY = window.scrollY;
+let ticking = false;
+
+const updateScrollState = () => {
+  const y = window.scrollY;
+  const maxScroll = root.scrollHeight - window.innerHeight;
+  root.style.setProperty("--progress", maxScroll > 0 ? (y / maxScroll).toFixed(4) : "0");
+  if (y < window.innerHeight * 1.2) root.style.setProperty("--hero-shift", (y * 0.25).toFixed(1));
+
+  header?.classList.toggle("scrolled", y > 20);
+  const goingDown = y > lastY + 2;
+  const goingUp = y < lastY - 2;
+  if (body.classList.contains("menu-open")) header?.classList.remove("hidden");
+  else if (goingDown && y > 400) header?.classList.add("hidden");
+  else if (goingUp || y < 400) header?.classList.remove("hidden");
+  lastY = y;
+
+  if (faqFab) {
+    const pastHero = y > window.innerHeight * 0.8;
+    const faqTop = faqSection && mainView.classList.contains("is-active") ? faqSection.getBoundingClientRect().top : Infinity;
+    faqFab.classList.toggle("show", pastHero && faqTop > window.innerHeight * 0.6 && mainView.classList.contains("is-active"));
+  }
+  ticking = false;
+};
+
+const onScroll = () => {
+  if (!ticking) { ticking = true; requestAnimationFrame(updateScrollState); }
+};
+window.addEventListener("scroll", onScroll, { passive: true });
+window.addEventListener("resize", onScroll, { passive: true });
+
 /* ---------- Reveal on scroll ---------- */
+document.querySelectorAll(".reveal-group").forEach((group) => {
+  Array.from(group.children).forEach((child, i) => child.style.setProperty("--i", i));
+});
+document.querySelectorAll(".split-in").forEach((el, i) => {
+  Array.from(el.children).forEach((child, j) => child.style.setProperty("--i", i + j));
+});
+
 const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        revealObserver.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("visible");
+      revealObserver.unobserve(entry.target);
     });
   },
-  { threshold: 0.14, rootMargin: "0px 0px -8% 0px" }
+  { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
 );
+document.querySelectorAll(".reveal, .reveal-group").forEach((el) => revealObserver.observe(el));
 
-revealItems.forEach((item) => revealObserver.observe(item));
-
-/* ---------- Section nav highlighting ---------- */
+/* ---------- Active nav link ---------- */
+const navLinks = document.querySelectorAll(".main-nav a");
 const sectionObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
-      navLinks.forEach((link) => {
-        link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`);
-      });
+      navLinks.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`));
     });
   },
-  { threshold: 0.28 }
+  { rootMargin: "-45% 0px -50% 0px" }
 );
-
-document.querySelectorAll('[data-view="main"] section[id]').forEach((section) => sectionObserver.observe(section));
+document.querySelectorAll('[data-view="main"] section[id]').forEach((s) => sectionObserver.observe(s));
 
 /* ---------- Stat counters ----------
-   Years auto-calculates from a fixed start year, so it silently becomes
-   16+, 17+, etc. in future years without any manual edits. Video count and
-   view count are static targets (update data-target by hand as real totals
-   grow) that roll up on scroll — no fake perpetual auto-increment, just a
-   one-time animated reveal each time the section scrolls into view. */
+   Years auto-calculates from a fixed start year. Video and view counts are
+   static targets (update data-target by hand) that roll up once on scroll. */
 const animateCounter = (counter) => {
   const startYear = counter.dataset.startYear;
-  const target = startYear
-    ? new Date().getFullYear() - Number(startYear)
-    : Number(counter.dataset.target);
-  const startFrom = counter.dataset.startFrom ? Number(counter.dataset.startFrom) : 0;
-  const format = counter.dataset.format;
-  const duration = counter.dataset.duration ? Number(counter.dataset.duration) : 1300;
-  const jitter = counter.dataset.jitter === "true";
+  const target = startYear ? new Date().getFullYear() - Number(startYear) : Number(counter.dataset.target);
+  const startFrom = Number(counter.dataset.startFrom || 0);
+  const duration = Number(counter.dataset.duration || 1800);
+  const render = (v) => (counter.dataset.format === "comma" ? Math.round(v).toLocaleString("en-IN") : String(Math.round(v)));
+
+  if (prefersReducedMotion) { counter.textContent = render(target); return; }
+
   const start = performance.now();
-
-  const render = (value) => (format === "comma" ? Math.round(value).toLocaleString("en-IN") : Math.round(value).toString());
-
   const tick = (now) => {
     const p = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - p, 3);
-    let value = startFrom + (target - startFrom) * eased;
-
-    // A brief slot-machine-style wobble early in the animation, tapering
-    // off to nothing well before it settles — still lands exactly on the
-    // real target, not an open-ended live counter.
-    if (jitter && p < 0.8) {
-      const wobble = (target - startFrom) * 0.015 * (1 - p / 0.8);
-      value += (Math.random() * 2 - 1) * wobble;
-    }
-
-    counter.textContent = render(value);
-    if (p < 1) {
-      requestAnimationFrame(tick);
-    } else {
-      counter.textContent = render(target);
-    }
+    const eased = 1 - Math.pow(1 - p, 4);
+    counter.textContent = render(startFrom + (target - startFrom) * eased);
+    if (p < 1) requestAnimationFrame(tick);
   };
-
   requestAnimationFrame(tick);
 };
 
 const counterObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        animateCounter(entry.target);
-        counterObserver.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      animateCounter(entry.target);
+      counterObserver.unobserve(entry.target);
     });
   },
-  { threshold: 0.55 }
+  { threshold: 0.6 }
 );
+document.querySelectorAll("[data-counter]").forEach((c) => counterObserver.observe(c));
 
-counters.forEach((counter) => counterObserver.observe(counter));
-
-/* ---------- Global region rotator ---------- */
+/* ---------- Region rotator ---------- */
+const rotator = document.querySelector("[data-rotator]");
 if (rotator && !prefersReducedMotion) {
   const spans = Array.from(rotator.querySelectorAll("span"));
-  let activeIndex = 0;
+  let index = 0;
   setInterval(() => {
-    spans[activeIndex].classList.remove("active");
-    activeIndex = (activeIndex + 1) % spans.length;
-    spans[activeIndex].classList.add("active");
-  }, 2600);
+    const current = spans[index];
+    current.classList.remove("active");
+    current.classList.add("leaving");
+    setTimeout(() => current.classList.remove("leaving"), 650);
+    index = (index + 1) % spans.length;
+    spans[index].classList.add("active");
+  }, 2400);
 }
+
+/* ---------- Marquees: duplicate content for a seamless loop ---------- */
+document.querySelectorAll("[data-marquee] .marquee-track").forEach((track) => {
+  Array.from(track.children).forEach((item) => {
+    const clone = item.cloneNode(true);
+    clone.setAttribute("aria-hidden", "true");
+    track.append(clone);
+  });
+  // Constant speed regardless of how many items are in the row
+  requestAnimationFrame(() => {
+    const pxPerSecond = 45;
+    track.style.setProperty("--marquee-duration", `${Math.max(track.scrollWidth / 2 / pxPerSecond, 20)}s`);
+  });
+});
+
+/* ==========================================================================
+   Mobile menu
+   ========================================================================== */
+const menuToggle = document.querySelector("[data-menu-toggle]");
+const mobileMenu = document.querySelector("[data-mobile-menu]");
+
+const setMenu = (open) => {
+  body.classList.toggle("menu-open", open);
+  menuToggle?.setAttribute("aria-expanded", String(open));
+  menuToggle?.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  mobileMenu?.setAttribute("aria-hidden", String(!open));
+  lockScroll(open);
+};
+menuToggle?.addEventListener("click", () => setMenu(!body.classList.contains("menu-open")));
+mobileMenu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
 
 /* ==========================================================================
    Video Portfolio
@@ -176,13 +204,10 @@ const categoryTitle = document.querySelector("[data-category-title]");
 const categoryDescription = document.querySelector("[data-category-description]");
 const categoryCount = document.querySelector("[data-category-count]");
 const categoryGrid = document.querySelector("[data-category-grid]");
-const backToMain = document.querySelector("[data-back-to-main]");
 const categoryCards = document.querySelectorAll("[data-category-card]");
-const categoryButtons = document.querySelectorAll("[data-open-category]");
 const videoModal = document.querySelector("[data-video-modal]");
 const videoPanel = document.querySelector("[data-video-panel]");
 const videoFrame = document.querySelector("[data-video-frame]");
-const closeVideoButtons = document.querySelectorAll("[data-close-video]");
 
 let activeView = mainView;
 
@@ -195,8 +220,7 @@ const portfolioCategories = {
     description: "Business videos, explainers, testimonials, event recaps, and brand films.",
     // Note: 2 additional Corporate videos are hosted on Vimeo
     // (vimeo.com/1066597339, vimeo.com/1066320097) and aren't included here
-    // yet since this player only embeds YouTube — let me know if you want
-    // Vimeo support added.
+    // since this player only embeds YouTube.
     vertical: false,
     videos: [
       { id: "WErc62GzhsM", title: "Corporate 01" },
@@ -220,7 +244,7 @@ const portfolioCategories = {
     ].map((id) => ({ id, title: "" })),
   },
   reels: {
-    title: "Reels/Shorts",
+    title: "Reels / Shorts",
     description: "Short-form vertical edits for FB, IG, and YT ads — fast hooks, tight pacing, and social-first attention.",
     vertical: true,
     videos: [
@@ -232,7 +256,7 @@ const portfolioCategories = {
     ].map((id, i) => ({ id, title: `Reel ${String(i + 1).padStart(2, "0")}` })),
   },
   vox: {
-    title: "Talking-head video editing",
+    title: "Talking-head Editing",
     description: "Story-led explainer edits with kinetic captions, atmosphere, real voices, and deeper narrative structure.",
     vertical: false,
     videos: [
@@ -241,7 +265,7 @@ const portfolioCategories = {
     ],
   },
   "motion-saas": {
-    title: "Motion Graphics / SaaS Style",
+    title: "Motion Graphics / SaaS",
     description: "UI animation, explainers, kinetic typography, infographics, and SaaS-style product motion.",
     vertical: false,
     videos: [
@@ -264,53 +288,41 @@ const portfolioCategories = {
   },
 };
 
-
 const thumbObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const url = el.dataset.lazyBg;
-        if (url) {
-          el.style.backgroundImage = `url("${url}")`;
-          el.removeAttribute("data-lazy-bg");
-        }
-        thumbObserver.unobserve(el);
-      }
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      el.style.backgroundImage = `url("${el.dataset.lazyBg}")`;
+      el.removeAttribute("data-lazy-bg");
+      thumbObserver.unobserve(el);
     });
   },
-  { rootMargin: "200px 0px" }
+  { rootMargin: "300px 0px" }
 );
 
-const createVideoThumb = (video, vertical) => {
+const createVideoThumb = (video, vertical, index) => {
   const card = document.createElement("div");
   card.className = "video-card";
+  card.style.setProperty("--i", index);
 
   const thumb = document.createElement("button");
   thumb.type = "button";
   thumb.className = vertical ? "video-thumb vertical" : "video-thumb";
-  thumb.dataset.videoId = video.id;
   thumb.setAttribute("aria-label", video.title ? `Play ${video.title}` : "Play video");
-  // hqdefault is far lighter than maxresdefault and looks identical at
-  // grid thumbnail size — kept lazy so only on-screen thumbs ever load.
   thumb.dataset.lazyBg = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
   thumb.innerHTML = `<span class="play-badge">Play</span>`;
-  thumb.addEventListener("click", () => openVideo(video.id, vertical));
+  thumb.addEventListener("click", () => openVideo(video.id, vertical, thumb));
   thumbObserver.observe(thumb);
-
   card.append(thumb);
 
-  // Titles are only generated where they're a fair generic label (e.g.
-  // "Reel 01"). Podcast videos are real client projects, not sequential
-  // episodes, and their real thumbnails already carry the actual title —
-  // so no caption is added here rather than showing a misleading one.
+  // Podcast thumbnails already carry the real episode title, so no caption.
   if (video.title) {
     const caption = document.createElement("p");
     caption.className = "video-caption";
     caption.textContent = video.title;
     card.append(caption);
   }
-
   return card;
 };
 
@@ -321,61 +333,52 @@ const renderCategory = (key) => {
   categoryDescription.textContent = category.description;
   categoryCount.textContent = category.videos.length ? `${category.videos.length} videos` : "";
   categoryGrid.classList.toggle("vertical", Boolean(category.vertical));
-
-  if (!category.videos.length) {
-    categoryGrid.replaceChildren();
-    const empty = document.createElement("p");
-    empty.className = "video-empty";
-    empty.textContent = "New work is on its way here — check back soon.";
-    categoryGrid.after(empty);
-    categoryGrid.dataset.emptyState = "1";
-  } else {
-    document.querySelectorAll(".video-empty").forEach((el) => el.remove());
-    categoryGrid.replaceChildren(...category.videos.map((v) => createVideoThumb(v, category.vertical)));
-  }
-
-  categoryCards.forEach((card) => card.classList.toggle("active", card.dataset.categoryCard === key));
+  categoryGrid.replaceChildren(...category.videos.map((v, i) => createVideoThumb(v, category.vertical, i)));
 };
 
-/* ---------- View transitions + routing ---------- */
-const transitionToView = (nextView, { resetScroll = false } = {}) => {
-  if (activeView === nextView) {
-    if (resetScroll) scrollToPosition(0, { immediate: true });
-    return;
-  }
-  const previousView = activeView;
-  previousView.classList.remove("is-active");
-  previousView.classList.add("is-exiting");
-  nextView.classList.add("is-active");
+/* ---------- View transitions + routing ----------
+   The old view fades out first, then the new one fades up — sequential, so
+   there's never a frame where both are stacked. */
+let viewTimer = null;
+const transitionToView = (nextView, { onSwap } = {}) => {
+  clearTimeout(viewTimer);
+  if (activeView === nextView) { onSwap?.(); return; }
+  const previous = activeView;
   activeView = nextView;
-  if (resetScroll) scrollToPosition(0, { immediate: true });
-  window.setTimeout(() => previousView.classList.remove("is-exiting"), prefersReducedMotion ? 0 : 560);
+  previous.classList.add("is-exiting");
+  viewTimer = setTimeout(() => {
+    previous.classList.remove("is-active", "is-exiting");
+    nextView.classList.add("is-active");
+    onSwap?.();
+    onScroll();
+  }, VIEW_EXIT_MS);
 };
 
-const scrollToMainAnchor = (hash) => {
-  const target = hash && hash !== "#/" ? document.querySelector(hash) : null;
-  const top = target ? target.offsetTop : 0;
-  window.setTimeout(() => scrollToPosition(top), activeView === mainView ? 0 : 560);
+const scrollToHash = (hash, immediate) => {
+  const target = hash && !hash.startsWith("#/") ? document.querySelector(hash) : null;
+  scrollToTarget(target || 0, { immediate });
 };
 
 const openCategory = (key) => {
-  renderCategory(key);
+  if (!portfolioCategories[key]) return;
   history.pushState({ view: "category", key }, "", `#/portfolio/${key}`);
-  transitionToView(categoryView, { resetScroll: true });
+  transitionToView(categoryView, {
+    onSwap: () => { renderCategory(key); scrollToTarget(0, { immediate: true }); },
+  });
 };
 
 const openMainView = ({ push = true, hash = "#/" } = {}) => {
-  categoryCards.forEach((card) => card.classList.remove("active"));
   if (push) history.pushState({ view: "main" }, "", hash);
-  transitionToView(mainView, { resetScroll: false });
-  scrollToMainAnchor(hash);
+  const switching = activeView !== mainView;
+  transitionToView(mainView, { onSwap: () => scrollToHash(hash, switching) });
 };
 
 const routeFromHash = () => {
   const match = window.location.hash.match(/^#\/portfolio\/([^/]+)$/);
   if (match && portfolioCategories[match[1]]) {
-    renderCategory(match[1]);
-    transitionToView(categoryView, { resetScroll: true });
+    transitionToView(categoryView, {
+      onSwap: () => { renderCategory(match[1]); scrollToTarget(0, { immediate: true }); },
+    });
     return;
   }
   openMainView({ push: false, hash: window.location.hash || "#/" });
@@ -390,181 +393,135 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
   });
 });
 
-categoryButtons.forEach((btn) => btn.addEventListener("click", (e) => { e.stopPropagation(); openCategory(btn.dataset.openCategory); }));
 categoryCards.forEach((card) => {
-  card.addEventListener("click", () => {
-    if (card.classList.contains("category-empty")) return;
-    openCategory(card.dataset.categoryCard);
-  });
+  card.addEventListener("click", () => openCategory(card.dataset.categoryCard));
   card.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openCategory(card.dataset.categoryCard); }
   });
 });
 
-backToMain?.addEventListener("click", () => openMainView({ hash: "#work" }));
+document.querySelector("[data-back-to-main]")?.addEventListener("click", () => openMainView({ hash: "#work" }));
 window.addEventListener("popstate", routeFromHash);
-routeFromHash();
+
+// Initial route: no transition, just show the right view.
+(() => {
+  const match = window.location.hash.match(/^#\/portfolio\/([^/]+)$/);
+  if (match && portfolioCategories[match[1]]) {
+    renderCategory(match[1]);
+    mainView.classList.remove("is-active");
+    categoryView.classList.add("is-active");
+    activeView = categoryView;
+  } else if (window.location.hash && !window.location.hash.startsWith("#/")) {
+    const target = document.querySelector(window.location.hash);
+    if (target) setTimeout(() => scrollToTarget(target, { immediate: true }), 50);
+  }
+  updateScrollState();
+})();
 
 /* ---------- Video modal ---------- */
+let lastFocused = null;
+
 const closeVideo = () => {
+  if (!videoModal.classList.contains("open")) return;
   videoModal.classList.remove("open");
   videoModal.setAttribute("aria-hidden", "true");
-  videoFrame.removeAttribute("src");
-  videoPanel.classList.remove("vertical");
+  lockScroll(false);
+  setTimeout(() => {
+    videoFrame.removeAttribute("src");
+    videoPanel.classList.remove("vertical");
+  }, 450);
+  lastFocused?.focus({ preventScroll: true });
 };
 
-const openVideo = (id, vertical) => {
+const openVideo = (id, vertical, trigger) => {
+  lastFocused = trigger || null;
   videoFrame.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
   videoPanel.classList.toggle("vertical", Boolean(vertical));
   videoModal.classList.add("open");
   videoModal.setAttribute("aria-hidden", "false");
+  lockScroll(true);
+  videoModal.querySelector(".modal-close")?.focus({ preventScroll: true });
 };
 
-closeVideoButtons.forEach((btn) => btn.addEventListener("click", closeVideo));
+document.querySelectorAll("[data-close-video]").forEach((btn) => btn.addEventListener("click", closeVideo));
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && videoModal.classList.contains("open")) closeVideo();
+  if (e.key !== "Escape") return;
+  closeVideo();
+  if (body.classList.contains("menu-open")) setMenu(false);
 });
 
 /* ==========================================================================
-   Services + Process — hover-linked
+   Services ↔ Process — hovering a service lights up the steps it uses
    ========================================================================== */
-const serviceGrid = document.querySelector("[data-service-grid]");
-const processSteps = document.querySelectorAll("[data-process-list] article");
-
-serviceGrid?.querySelectorAll(".service-card").forEach((card) => {
-  const relevant = (card.dataset.steps || "").split(",").filter(Boolean);
-  card.addEventListener("mouseenter", () => {
+const processSteps = document.querySelectorAll("[data-process-list] li");
+document.querySelectorAll("[data-service-grid] [data-steps]").forEach((row) => {
+  const relevant = row.dataset.steps.split(",");
+  row.addEventListener("mouseenter", () => {
     processSteps.forEach((step) => {
-      const isRelevant = relevant.includes(step.dataset.step);
-      step.classList.toggle("step-highlight", isRelevant);
-      step.classList.toggle("step-dim", !isRelevant);
+      const on = relevant.includes(step.dataset.step);
+      step.classList.toggle("step-highlight", on);
+      step.classList.toggle("step-dim", !on);
     });
   });
-  card.addEventListener("mouseleave", () => {
-    processSteps.forEach((step) => step.classList.remove("step-highlight", "step-dim"));
+  row.addEventListener("mouseleave", () => processSteps.forEach((s) => s.classList.remove("step-highlight", "step-dim")));
+});
+
+/* ==========================================================================
+   FAQ accordion
+   ========================================================================== */
+document.querySelectorAll("[data-faq] .faq-item").forEach((item) => {
+  const button = item.querySelector("button");
+  button.addEventListener("click", () => {
+    const open = !item.classList.contains("open");
+    item.classList.toggle("open", open);
+    button.setAttribute("aria-expanded", String(open));
+    // Let Lenis pick up the new page height after the animation
+    setTimeout(() => lenis?.resize(), 650);
   });
 });
 
 /* ==========================================================================
-   Contact form — Netlify Forms (AJAX submit, no app-picker redirect)
+   Contact form — Netlify Forms (AJAX submit), mailto fallback elsewhere
    ========================================================================== */
 const contactForm = document.querySelector("[data-contact-form]");
 const formStatus = document.querySelector("[data-form-status]");
 
-const encodeFormData = (data) =>
-  Object.keys(data)
-    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-    .join("&");
-
 contactForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const data = new FormData(contactForm);
-  const payload = Object.fromEntries(data.entries());
+  const payload = Object.fromEntries(new FormData(contactForm).entries());
   const submitButton = contactForm.querySelector("button[type='submit']");
-
+  const originalLabel = submitButton.innerHTML;
   submitButton.disabled = true;
-  submitButton.textContent = "Sending...";
+  submitButton.textContent = "Sending…";
 
   try {
     const response = await fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: encodeFormData(payload),
+      body: new URLSearchParams(payload).toString(),
     });
-
-    if (!response.ok) {
-      throw new Error(`Form submission failed: ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`Form submission failed: ${response.status}`);
     contactForm.reset();
     formStatus.textContent = "Thanks — I'll get back to you shortly.";
-    formStatus.hidden = false;
     formStatus.classList.remove("error");
   } catch {
-    // Netlify Forms only works once the site is actually deployed on
-    // Netlify (it won't work opening index.html directly from disk, or on
-    // other hosts without their own form handler). Fall back to mailto so
-    // a message still gets through either way.
+    // Netlify Forms only works on a Netlify deploy — fall back to email.
     const subject = encodeURIComponent(`26amFilms project inquiry from ${payload.name || ""}`);
-    const body = encodeURIComponent(`Name: ${payload.name}\nEmail: ${payload.email}\n\nProject:\n${payload.message}`);
-    window.location.href = `mailto:hello@26amfilms.com?subject=${subject}&body=${body}`;
-    formStatus.textContent = "Opening your email app instead — Netlify Forms isn't available here.";
-    formStatus.hidden = false;
+    const mailBody = encodeURIComponent(`Name: ${payload.name}\nEmail: ${payload.email}\n\nProject:\n${payload.message}`);
+    window.location.href = `mailto:hello@26amfilms.com?subject=${subject}&body=${mailBody}`;
+    formStatus.textContent = "Opening your email app instead.";
     formStatus.classList.add("error");
   } finally {
+    formStatus.hidden = false;
     submitButton.disabled = false;
-    submitButton.textContent = "Send Inquiry";
+    submitButton.innerHTML = originalLabel;
   }
 });
 
-/* ---------- Discord copy-to-clipboard ----------
-   Discord usernames aren't linkable the way email/WhatsApp are — there's
-   no public URL to open a DM by username. Copy-to-clipboard with visual
-   confirmation is the honest equivalent of a "contact" button here. */
-document.querySelectorAll("[data-discord-copy]").forEach((btn) => {
-  const username = btn.dataset.discordCopy;
-  const originalHTML = btn.innerHTML;
-  btn.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(username);
-      btn.classList.add("copied");
-      btn.textContent = `Copied "${username}"`;
-      window.setTimeout(() => {
-        btn.classList.remove("copied");
-        btn.innerHTML = originalHTML;
-      }, 1800);
-    } catch {
-      // Clipboard API can fail (e.g. no HTTPS, permissions) — fall back to
-      // just showing the username so the person can copy it manually.
-      btn.textContent = username;
-    }
-  });
-});
-
-/* ---------- Placeholder links ----------
-   Contact links (Slack, Instagram, X, booking, payment) don't have real
-   URLs yet — this just gives a clear signal instead of a dead "#" click
-   until real links are added to the href attributes above. */
+/* ---------- Placeholder links (no real URL yet) ---------- */
 document.querySelectorAll("[data-placeholder-link]").forEach((link) => {
-  link.addEventListener("click", (event) => {
-    if (link.getAttribute("href") === "#") {
-      event.preventDefault();
-    }
-  });
+  link.addEventListener("click", (e) => { if (link.getAttribute("href") === "#") e.preventDefault(); });
 });
 
-
-
-
-/* ==========================================================================
-   FAQ Modal & Floating Button
-   ========================================================================== */
-const faqButton = document.querySelector("[data-faq-button]");
-const faqModal = document.querySelector("[data-faq-modal]");
-const faqModalClose = document.querySelectorAll("[data-faq-modal-close]");
-
-if (faqButton && faqModal) {
-  // Open modal on button click
-  faqButton.addEventListener("click", () => {
-    faqModal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  });
-
-  // Close modal on close button or backdrop click
-  faqModalClose.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      faqModal.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-    });
-  });
-
-  // Close modal on ESC key
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && faqModal.getAttribute("aria-hidden") === "false") {
-      faqModal.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-    }
-  });
-}
-
+/* ---------- Footer year ---------- */
+document.querySelectorAll("[data-year]").forEach((el) => { el.textContent = new Date().getFullYear(); });
