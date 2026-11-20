@@ -81,11 +81,11 @@
       <div class="hero-bottom">
         <div class="hero-copy split-in">
           <p class="hero-sub"><span>Video editing that keeps your audience watching.</span></p>
-          <p class="hero-body"><span>Founded by <strong>Santosh Panigrahi</strong> — a Video Editor and Motion Designer with 15+ years of experience creating content for YouTube, podcasts, brands, startups, and agencies.</span></p>
+          <p class="hero-body"><span>Founded by <strong>Santosh Panigrahi</strong> — a Video Editor and Motion Designer with <span data-years>15</span>+ years of experience creating content for YouTube, podcasts, brands, startups, and agencies.</span></p>
         </div>
         <div class="hero-actions split-in">
-          <span><a class="button solid" href="#work">View Work</a></span>
-          <span><a class="button ghost" href="#contact">Start a Project</a></span>
+          <span><a class="button solid" href="#work" data-track="view_work">View Work</a></span>
+          <span><a class="button ghost" href="#contact" data-track="start_project">Start a Project</a></span>
         </div>
       </div>
     </div>
@@ -104,15 +104,15 @@
 
       <div class="stats reveal-group">
         <div class="stat">
-          <div class="stat-value"><span data-counter data-target="15" data-start-year="2011">0</span><sup>+</sup></div>
+          <div class="stat-value"><span data-counter data-years-counter>15</span><sup>+</sup></div>
           <p>Years of experience</p>
         </div>
         <div class="stat">
-          <div class="stat-value"><span data-counter data-target="400">0</span><sup>+</sup></div>
+          <div class="stat-value"><span data-counter data-target="400">400</span><sup>+</sup></div>
           <p>Videos edited</p>
         </div>
         <div class="stat">
-          <div class="stat-value"><span data-counter data-target="1700000" data-start-from="1600000" data-duration="3200" data-format="comma">0</span><sup>+</sup></div>
+          <div class="stat-value"><span data-counter data-target="1700000" data-start-from="1600000" data-duration="3200" data-format="comma">17,00,000</span><sup>+</sup></div>
           <p>Total views generated</p>
         </div>
         <div class="stat">
@@ -147,6 +147,7 @@
             <span class="category-index">01</span>
             <h3>Podcast</h3>
             <p>Hours of raw footage into smooth, one-hour podcast edits — recorded on Riverside, cleaned up, captioned, and packaged for release.</p>
+            <span class="category-count" data-card-count></span>
             <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
@@ -157,6 +158,7 @@
             <span class="category-index">02</span>
             <h3>Reels / Shorts</h3>
             <p>Short-form vertical edits for FB, IG, and YT ads — fast hooks, tight pacing, and social-first attention.</p>
+            <span class="category-count" data-card-count></span>
             <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
@@ -167,6 +169,7 @@
             <span class="category-index">03</span>
             <h3>Films &amp; Events</h3>
             <p>Short films, event coverage, and summit recaps shaped around real moments and clean pacing.</p>
+            <span class="category-count" data-card-count></span>
             <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
@@ -177,6 +180,7 @@
             <span class="category-index">04</span>
             <h3>Corporate Videos</h3>
             <p>Business videos, explainers, testimonials, event recaps, and brand films.</p>
+            <span class="category-count" data-card-count></span>
             <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
@@ -187,6 +191,7 @@
             <span class="category-index">05</span>
             <h3>Talking-head Editing</h3>
             <p>Story-led explainer edits with kinetic captions, atmosphere, real voices, and deeper narrative structure.</p>
+            <span class="category-count" data-card-count></span>
             <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
@@ -197,6 +202,7 @@
             <span class="category-index">06</span>
             <h3>Motion Graphics / SaaS</h3>
             <p>UI animation, explainers, kinetic typography, infographics, and SaaS-style product motion.</p>
+            <span class="category-count" data-card-count></span>
             <span class="category-action">View list <i aria-hidden="true">→</i></span>
           </div>
         </article>
@@ -260,7 +266,7 @@
       <div class="split-head">
         <div class="reveal">
           <span class="eyebrow">About the Founder</span>
-          <h2>15+ years across video production, motion design, and <em>brand content</em>.</h2>
+          <h2><span data-years>15</span>+ years across video production, motion design, and <em>brand content</em>.</h2>
         </div>
         <p class="reveal">Led by <strong>Santosh Panigrahi</strong>, founder of 26amFilms — a complete post-production skillset for modern content.</p>
       </div>
@@ -470,10 +476,8 @@
             <li><a href="https://www.linkedin.com/in/santoshp26/" target="_blank" rel="noopener"><span>LinkedIn</span><i aria-hidden="true">↗</i></a></li>
           </ul>
 
-          <a href="#" data-placeholder-link class="settle-up">
-            <span class="settle-up-icon">$</span>
-            Already working together? Settle up here.
-          </a>
+          <!-- "Already working together? Settle up here." link removed until there's a real payment URL.
+               To restore: <a class="settle-up" href="PAYMENT_URL"><span class="settle-up-icon">$</span>Already working together? Settle up here.</a> -->
         </div>
 
         <form class="contact-form reveal" data-contact-form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
@@ -545,7 +549,7 @@
 <!-- ============================ END MAIN VIEW ============================ -->
 
 <!-- ============================ CATEGORY VIEW ============================ -->
-<div data-view="category">
+<div data-view="category" hidden>
   <section class="category-hero">
     <div class="container">
       <button class="back-link" type="button" data-back-to-main><i aria-hidden="true">←</i> Back to portfolio</button>
@@ -581,7 +585,7 @@
 </footer>
 
 <!-- Video modal -->
-<div class="video-modal" data-video-modal aria-hidden="true">
+<div class="video-modal" data-video-modal aria-hidden="true" hidden>
   <div class="video-modal-backdrop" data-close-video></div>
   <div class="video-modal-panel" data-video-panel role="dialog" aria-modal="true" aria-label="Video player">
     <button class="modal-close" type="button" data-close-video aria-label="Close video">×</button>

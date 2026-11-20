@@ -13,6 +13,16 @@ const storage = {
   set(key, value) { try { localStorage.setItem(key, value); } catch { /* private mode */ } },
 };
 
+/* ---------- Analytics (GA4): Book a Call clicks ---------- */
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-track], a[href*='calendar.app.google']");
+  if (!el || typeof window.gtag !== "function") return;
+  window.gtag("event", el.dataset.track || "book_call", {
+    link_text: el.textContent.trim().slice(0, 60),
+    link_location: el.closest("header") ? "header" : "resources",
+  });
+});
+
 /* ---------- Theme (shared key with main site) ---------- */
 const savedTheme = storage.get("26amfilms-theme");
 if (savedTheme) root.dataset.theme = savedTheme;

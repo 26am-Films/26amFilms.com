@@ -14,6 +14,27 @@ const storage = {
   set(key, value) { try { localStorage.setItem(key, value); } catch { /* private mode */ } },
 };
 
+/* ---------- Analytics (GA4) ----------
+   Safe no-op if gtag is blocked or hasn't loaded. Buttons opt in with
+   data-track="event_name"; every Google Calendar link counts as book_call. */
+const track = (event, params = {}) => {
+  if (typeof window.gtag === "function") window.gtag("event", event, params);
+};
+
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-track], a[href*='calendar.app.google']");
+  if (!el) return;
+  track(el.dataset.track || "book_call", {
+    link_text: el.textContent.trim().slice(0, 60),
+    link_location: el.closest("header") ? "header" : el.closest("[id]")?.id || "page",
+  });
+});
+
+/* ---------- Years of experience: one source for every mention ---------- */
+const CAREER_START_YEAR = 2011;
+const yearsOfExperience = new Date().getFullYear() - CAREER_START_YEAR;
+document.querySelectorAll("[data-years]").forEach((el) => { el.textContent = yearsOfExperience; });
+
 /* ---------- Theme (black ↔ white) ---------- */
 const savedTheme = storage.get("26amfilms-theme");
 if (savedTheme) root.dataset.theme = savedTheme;
@@ -119,12 +140,14 @@ document.querySelectorAll('[data-view="main"] section[id]').forEach((s) => secti
 /* ---------- Stat counters ----------
    Years auto-calculates from a fixed start year. Video and view counts are
    static targets (update data-target by hand) that roll up once on scroll. */
+const counterTarget = (counter) => (counter.hasAttribute("data-years-counter") ? yearsOfExperience : Number(counter.dataset.target));
+const renderCounter = (counter, v) => (counter.dataset.format === "comma" ? Math.round(v).toLocaleString("en-IN") : String(Math.round(v)));
+
 const animateCounter = (counter) => {
-  const startYear = counter.dataset.startYear;
-  const target = startYear ? new Date().getFullYear() - Number(startYear) : Number(counter.dataset.target);
+  const target = counterTarget(counter);
   const startFrom = Number(counter.dataset.startFrom || 0);
   const duration = Number(counter.dataset.duration || 1800);
-  const render = (v) => (counter.dataset.format === "comma" ? Math.round(v).toLocaleString("en-IN") : String(Math.round(v)));
+  const render = (v) => renderCounter(counter, v);
 
   if (prefersReducedMotion) { counter.textContent = render(target); return; }
 
@@ -134,6 +157,7 @@ const animateCounter = (counter) => {
     const eased = 1 - Math.pow(1 - p, 4);
     counter.textContent = render(startFrom + (target - startFrom) * eased);
     if (p < 1) requestAnimationFrame(tick);
+    else counter.textContent = render(target);
   };
   requestAnimationFrame(tick);
 };
@@ -146,9 +170,16 @@ const counterObserver = new IntersectionObserver(
       counterObserver.unobserve(entry.target);
     });
   },
-  { threshold: 0.6 }
+  { threshold: 0.2 }
 );
-document.querySelectorAll("[data-counter]").forEach((c) => counterObserver.observe(c));
+// The HTML already holds the real numbers, so the stats read correctly even
+// if this script never runs. Only once we know we can animate do we reset to
+// the start value and roll up when the stats scroll into view.
+document.querySelectorAll("[data-counter]").forEach((c) => {
+  if (prefersReducedMotion) { c.textContent = renderCounter(c, counterTarget(c)); return; }
+  c.textContent = renderCounter(c, Number(c.dataset.startFrom || 0));
+  counterObserver.observe(c);
+});
 
 /* ---------- Region rotator ---------- */
 const rotator = document.querySelector("[data-rotator]");
@@ -241,6 +272,9 @@ const portfolioCategories = {
       "vuxztj8MXxI", "n3uEWZ1KT64", "iVa0NP3u74s", "SEAVE9XgBbM", "-stDHMwbBRw",
       "aI5-oKjfgo4", "wueNYL-wNiU", "VwJnowQ7Iio", "2IiKVJhrWQQ", "4JKzfCdwiSo",
       "SJi5MfOZYnk", "aDZd77cefbs", "AsWsnL_zcmA",
+      "C6f8E897Pgs", "TEF_kYBcn8E", "qFTu9nRdU4g", "JpR_c36oMVk", "7OFueWiLLlY",
+      "sCe94K_bnm8", "jHLsvVuJjOA",
+      "m7iIL5hwqMs", // P2P Masterclass
     ].map((id) => ({ id, title: "" })),
   },
   reels: {
@@ -253,7 +287,13 @@ const portfolioCategories = {
       "6iLH5IPmBJQ", "kTqo8ZCNHy8", "hEIUfa4B1Ng", "dCIl2I5_CJk", "99Oc2Ozp998",
       "5386z9zDuIM", "6mnAQABar5s", "kq3Z0u2OpHo", "UqJIBgnfVFs", "Sg7D9NXsLjs",
       "nWZ-kRttIeQ", "Lx7yS5DOgSY", "SZuWOagXT7M", "uhdkE6oZJdM", "009L0XUuJ-g", "uDUy0cPeCUA", "CC8Wb7BGoV4",
-    ].map((id, i) => ({ id, title: `Reel ${String(i + 1).padStart(2, "0")}` })),
+      "VISbqJ69X4U", "fhnqB4TiRM4", "ysYRggQL4yA", "yPRmtFJ--5o", "xkHyNvB-yp0",
+      "teMOHWsLOGk", "k9OZpBq-izQ", "6cp6DBGDNd8", "NE6vVe-YnZk", "FpyhjgxkRXM",
+      "AiWB0pNWrWU", "gxEIl2LmdL4", "D0T6Wim91ZE", "FEuZcllxeqk", "3feVNgtkXPU",
+      "BMGaHy_EHIE", "VjkcY20Mstc", "6jz5bsR_K1Y", "t22UviZExa0", "PuE7VjGMp9E",
+      "awdqw_UwR5c", "Zvr6aU6OtNg", "J21RUmmnXTg", "QsJQr_BMj0U", "Mo__r1CWfhY",
+      "HOQvqbb_H88", "OCUlIgneLBk", "osRTtRLqdTw",
+    ].filter((id, i, all) => all.indexOf(id) === i).map((id, i) => ({ id, title: `Reel ${String(i + 1).padStart(2, "0")}` })),
   },
   vox: {
     title: "Talking-head Editing",
@@ -262,6 +302,7 @@ const portfolioCategories = {
     videos: [
       { id: "DHfRMLihR18", title: "Talking-head 01" },
       { id: "B3E1F0rJnLQ", title: "Talking-head 02" },
+      { id: "78dqieABevk", title: "Talking-head 03" },
     ],
   },
   "motion-saas": {
@@ -293,15 +334,22 @@ const thumbObserver = new IntersectionObserver(
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       const el = entry.target;
-      el.style.backgroundImage = `url("${el.dataset.lazyBg}")`;
+      const { lazyBg, fallbackBg } = el.dataset;
       el.removeAttribute("data-lazy-bg");
       thumbObserver.unobserve(el);
+      if (!fallbackBg) { el.style.backgroundImage = `url("${lazyBg}")`; return; }
+      // Shorts: try YouTube's vertical thumbnail first. Not every Short has
+      // one (404 or a tiny placeholder), so fall back to the 16:9 one.
+      const probe = new Image();
+      probe.onload = () => { el.style.backgroundImage = `url("${probe.naturalWidth > 120 ? lazyBg : fallbackBg}")`; };
+      probe.onerror = () => { el.style.backgroundImage = `url("${fallbackBg}")`; };
+      probe.src = lazyBg;
     });
   },
   { rootMargin: "300px 0px" }
 );
 
-const createVideoThumb = (video, vertical, index) => {
+const createVideoThumb = (video, vertical, index, categoryKey) => {
   const card = document.createElement("div");
   card.className = "video-card";
   card.style.setProperty("--i", index);
@@ -310,9 +358,15 @@ const createVideoThumb = (video, vertical, index) => {
   thumb.type = "button";
   thumb.className = vertical ? "video-thumb vertical" : "video-thumb";
   thumb.setAttribute("aria-label", video.title ? `Play ${video.title}` : "Play video");
-  thumb.dataset.lazyBg = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
+  const hq = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
+  if (vertical) {
+    thumb.dataset.lazyBg = `https://img.youtube.com/vi/${video.id}/oardefault.jpg`;
+    thumb.dataset.fallbackBg = hq;
+  } else {
+    thumb.dataset.lazyBg = hq;
+  }
   thumb.innerHTML = `<span class="play-badge">Play</span>`;
-  thumb.addEventListener("click", () => openVideo(video.id, vertical, thumb));
+  thumb.addEventListener("click", () => openVideo(video.id, vertical, thumb, categoryKey));
   thumbObserver.observe(thumb);
   card.append(thumb);
 
@@ -326,14 +380,23 @@ const createVideoThumb = (video, vertical, index) => {
   return card;
 };
 
+const videoCountLabel = (n) => (n ? `${n} video${n === 1 ? "" : "s"}` : "");
+
+// Show each category's real video count on its card
+categoryCards.forEach((card) => {
+  const category = portfolioCategories[card.dataset.categoryCard];
+  const label = card.querySelector("[data-card-count]");
+  if (category && label) label.textContent = videoCountLabel(category.videos.length);
+});
+
 const renderCategory = (key) => {
   const category = portfolioCategories[key];
   if (!category) return;
   categoryTitle.textContent = category.title;
   categoryDescription.textContent = category.description;
-  categoryCount.textContent = category.videos.length ? `${category.videos.length} videos` : "";
+  categoryCount.textContent = videoCountLabel(category.videos.length);
   categoryGrid.classList.toggle("vertical", Boolean(category.vertical));
-  categoryGrid.replaceChildren(...category.videos.map((v, i) => createVideoThumb(v, category.vertical, i)));
+  categoryGrid.replaceChildren(...category.videos.map((v, i) => createVideoThumb(v, category.vertical, i, key)));
 };
 
 /* ---------- View transitions + routing ----------
@@ -348,6 +411,8 @@ const transitionToView = (nextView, { onSwap } = {}) => {
   previous.classList.add("is-exiting");
   viewTimer = setTimeout(() => {
     previous.classList.remove("is-active", "is-exiting");
+    previous.hidden = true;
+    nextView.hidden = false;
     nextView.classList.add("is-active");
     onSwap?.();
     onScroll();
@@ -409,6 +474,8 @@ window.addEventListener("popstate", routeFromHash);
   if (match && portfolioCategories[match[1]]) {
     renderCategory(match[1]);
     mainView.classList.remove("is-active");
+    mainView.hidden = true;
+    categoryView.hidden = false;
     categoryView.classList.add("is-active");
     activeView = categoryView;
   } else if (window.location.hash && !window.location.hash.startsWith("#/")) {
@@ -427,17 +494,22 @@ const closeVideo = () => {
   videoModal.setAttribute("aria-hidden", "true");
   lockScroll(false);
   setTimeout(() => {
+    if (videoModal.classList.contains("open")) return; // reopened meanwhile
     videoFrame.removeAttribute("src");
     videoPanel.classList.remove("vertical");
+    videoModal.hidden = true;
   }, 450);
   lastFocused?.focus({ preventScroll: true });
 };
 
-const openVideo = (id, vertical, trigger) => {
+const openVideo = (id, vertical, trigger, categoryKey) => {
   lastFocused = trigger || null;
   videoFrame.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
   videoPanel.classList.toggle("vertical", Boolean(vertical));
+  videoModal.hidden = false;
+  void videoModal.offsetWidth; // start the fade-in from the hidden state
   videoModal.classList.add("open");
+  track("video_play", { video_id: id, video_category: categoryKey || "", video_format: vertical ? "short" : "long_form" });
   videoModal.setAttribute("aria-hidden", "false");
   lockScroll(true);
   videoModal.querySelector(".modal-close")?.focus({ preventScroll: true });
@@ -502,10 +574,12 @@ contactForm?.addEventListener("submit", async (event) => {
     });
     if (!response.ok) throw new Error(`Form submission failed: ${response.status}`);
     contactForm.reset();
+    track("contact_form_submit", { method: "netlify_form" });
     formStatus.textContent = "Thanks — I'll get back to you shortly.";
     formStatus.classList.remove("error");
   } catch {
     // Netlify Forms only works on a Netlify deploy — fall back to email.
+    track("contact_form_submit", { method: "mailto_fallback" });
     const subject = encodeURIComponent(`26amFilms project inquiry from ${payload.name || ""}`);
     const mailBody = encodeURIComponent(`Name: ${payload.name}\nEmail: ${payload.email}\n\nProject:\n${payload.message}`);
     window.location.href = `mailto:hello@26amfilms.com?subject=${subject}&body=${mailBody}`;

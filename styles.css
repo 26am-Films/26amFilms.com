@@ -44,6 +44,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 html {
   -webkit-text-size-adjust: 100%;
@@ -634,7 +635,16 @@ em {
 .category-index { color: var(--faint); font-size: 0.8rem; padding-top: 0.25rem; }
 .category-body h3 { font-size: 1.35rem; }
 .category-body p,
+.category-count,
 .category-action { grid-column: 2; }
+.category-count {
+  color: var(--faint);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  margin-top: 0.3rem;
+  text-transform: uppercase;
+}
+.category-count:empty { display: none; }
 .category-body p { font-size: 0.93rem; }
 .category-action {
   display: inline-flex;
